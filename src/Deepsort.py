@@ -53,14 +53,14 @@ OBJ_TRACK_BOX_COLOR = tuple(config['obj_track_box_color'])
 #                 today=config['today'])
 
 # Deep Sort Parameters
-MAX_AGE = 5                 # Maximum number of frames to keep a track alive without new detections. Default is 30
+MAX_AGE = 30                 # Maximum number of frames to keep a track alive without new detections. Default is 30
 
-N_INIT =1                  # Minimum number of detections needed to start a new track. Default is 3
+N_INIT =7                  # Minimum number of detections needed to start a new track. Default is 3
 
-NMS_MAX_OVERLAP = 1.0       # Maximum overlap between bounding boxes allowed for non maximal supression(NMS).
+NMS_MAX_OVERLAP = 0.7       # Maximum overlap between bounding boxes allowed for non maximal supression(NMS).
                             #If two bounding boxes overlap by more than this value, the one with the lower confidence score is suppressed. Defaults to 1.0.
 
-MAX_COSINE_DISTANCE = 0.3   # Maximum cosine distance allowed for matching detections to existing tracks. 
+MAX_COSINE_DISTANCE = 0.5   # Maximum cosine distance allowed for matching detections to existing tracks. 
                             #If the cosine distance between the detection's feature vector and the track's feature vector is higher than this value, 
                             # the detection is not matched to the track. Defaults to 0.2
 

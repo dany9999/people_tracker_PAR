@@ -1,11 +1,11 @@
 people_track: 
  
  detector:
-  model_name: 'yolov5n'
+  model_name: 'yolov5x6'
   tracked_class: 'person'
   downscale_factor: 2
   confidence_threshold: 0.1
-  disp_obj_detect_box: False   # Set to true if you want to view the detections from object detector 
+  disp_obj_detect_box: True   # Set to true if you want to view the detections from object detector 
  
  #set Deepsort parameters
  deep_sort:
@@ -29,7 +29,7 @@ people_track:
 
   #tracker visualization parameters
   disp_tracks: False           # Set to True if you want to display tracks
-  disp_obj_track_box: True    # Set to True if you want to display the object tracking box
+  disp_obj_track_box: False    # Set to True if you want to display the object tracking box
   obj_tack_color: (51,255,255) # Track color in BGR format 
   obj_track_box_color: (0,0,255)  # Track box color in BGR Format 
 
@@ -42,6 +42,6 @@ people_track:
   frame_height:  640
  
  main:
-  model_name: 'yolov5n'
+  model_name: 'yolov5x6'
   disp_fps: True 
   disp_obj_count: True
