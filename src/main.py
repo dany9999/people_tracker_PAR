@@ -50,7 +50,7 @@ while cap.isOpened():
     tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)#
     tracker.display_track(track_history , tracks_current , img)
     #Count metrics for ROI
-    people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, img.shape)
+    people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS))
     # FPS Calculation
     end_time = time.perf_counter()
     total_time = end_time - start_time

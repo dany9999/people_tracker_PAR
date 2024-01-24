@@ -46,12 +46,12 @@ def parse_config_file(roi_file_path, cap):
     return rois
 
 
-def update_people_dict(people_dict, tracks_current, rois, previous_roi_status, img_shape):
+def update_people_dict(people_dict, tracks_current, rois, previous_roi_status, fps):
     for track in tracks_current:
         if people_dict.get(track.track_id) is None:
             # So far instantiate only with id, later can be with other tracked attributes
             people_dict[track.track_id] = TrackedPerson(track.track_id)
-        people_dict, previous_roi_status = update_passages_persistence(rois, track, people_dict, previous_roi_status, img_shape)
+        people_dict, previous_roi_status = update_passages_persistence(rois, track, people_dict, previous_roi_status, fps)
     return people_dict, previous_roi_status  
 
 
@@ -59,7 +59,7 @@ def display_rois(img, rois):
     cv2.rectangle(img, rois[0][0], rois[0][1], (255,0,0), 1)
     cv2.rectangle(img, rois[1][0], rois[1][1], (0,255,0), 1)
 
-def update_passages_persistence(rois, track, people_dict, previous_roi_status, img_shape):
+def update_passages_persistence(rois, track, people_dict, previous_roi_status, fps):
     # Check if object center is inside ROI1 and update counters
     #print(vars(track))
     curr_person = people_dict[track.track_id]    
@@ -72,7 +72,7 @@ def update_passages_persistence(rois, track, people_dict, previous_roi_status, i
     for i, roi in enumerate(rois):
         if roi[0][0] < center_x < roi[1][0] and roi[0][1] < center_y < roi[1][1]:
             # Update occurrences for ROI1 and object ID
-            curr_person.roi_persistence_times[i] += 1
+            curr_person.roi_persistence_times[i] += 1/fps
             # Check if the object is already inside the ROI
             if not previous_roi_status[i].get(class_id, False):
                 curr_person.roi_passages[i] += 1
