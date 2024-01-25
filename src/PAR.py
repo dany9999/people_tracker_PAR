@@ -42,7 +42,7 @@ class PAR(object):
         ######################################################################
         # Argument
         # ---------
-        self.dataset = "market" 
+        self.dataset = "duke" 
         #model_name = '{}_nfc_id'.format('resnet50') if False else '{}_nfc'.format(args.backbone) #aggiusta la stringa in base all'uso dell'id.... {}_nfc_id formattaizone stringhe in python
         self.model_name = '{}_nfc'.format('resnet50')  #con id
         self.use_id = False
@@ -61,7 +61,7 @@ class PAR(object):
 
         with open('src/doc/label.json', 'r') as f:
             self.label_list = json.load(f)[self.dataset]
-        with open('src/doc/label.json', 'r') as f:
+        with open('src/doc/attribute.json', 'r') as f:
             self.attribute_dict = json.load(f)[self.dataset]
         self.num_label = len(self.label_list)
 
@@ -97,8 +97,8 @@ class PAR(object):
         pred = torch.gt(out, torch.ones_like(out)/3 )  # change denominator to change the threshold, now is 1/3 = 0.333 
         #Dec = PAR(self.dataset) 
         self.decode(pred)
-        self.select_id_prediction(self.all_pred)
-        self.print_pred(self.all_pred,our_list_duke)  # here we print the result of prediction
+        self.select_id_prediction()
+        self.print_pred(our_list_duke)  # here we print the result of prediction
         #print(pred)
         return self.all_pred
     

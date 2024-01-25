@@ -81,4 +81,4 @@ hf.create_the_output_file(people_dict, 'results/results.txt')
 
 par = PAR()
 src = Image.open("src/test_sample/daniele.jpg")
-par.attribute_recognition(src)
+dict = par.attribute_recognition(src)
