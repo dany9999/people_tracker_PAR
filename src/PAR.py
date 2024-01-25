@@ -59,18 +59,17 @@ class PAR(object):
         self.model = self.load_network(self.model)
         self.model.eval()  #imposta il modello in eval mode.
 
-        with open('./doc/label.json', 'r') as f:
+        with open('src/doc/label.json', 'r') as f:
             self.label_list = json.load(f)[self.dataset]
-        with open('./doc/attribute.json', 'r') as f:
+        with open('src/doc/label.json', 'r') as f:
             self.attribute_dict = json.load(f)[self.dataset]
-
         self.num_label = len(self.label_list)
 
     ######################################################################
     # Model and Data
     # ---------
     def load_network(self,network):   #Carico il modello in base al dataset
-        save_path = os.path.join('src','Person_Attribute_Recognition_MarketDuke_master','checkpoints', self.dataset, self.model_name, 'net_last.pth')
+        save_path = os.path.join('src','checkpoints', self.dataset, self.model_name, 'net_last.pth')
         print(save_path)
         network.load_state_dict(torch.load(save_path))
         print('Resume model from {}'.format(save_path))
@@ -96,10 +95,10 @@ class PAR(object):
             out, _ = self.model.forward(src)
 
         pred = torch.gt(out, torch.ones_like(out)/3 )  # change denominator to change the threshold, now is 1/3 = 0.333 
-        Dec = PAR(self.dataset) 
-        Dec.decode(pred)
-        Dec.select_id_prediction(self.all_pred)
-        Dec.print_pred(self.all_pred,our_list_duke)  # here we print the result of prediction
+        #Dec = PAR(self.dataset) 
+        self.decode(pred)
+        self.select_id_prediction(self.all_pred)
+        self.print_pred(self.all_pred,our_list_duke)  # here we print the result of prediction
         #print(pred)
         return self.all_pred
     
