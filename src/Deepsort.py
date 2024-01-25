@@ -15,67 +15,63 @@ OBJ_TRACK_COLOR = tuple(config['obj_tack_color'])
 OBJ_TRACK_BOX_COLOR = tuple(config['obj_track_box_color'])
 
 # # Deep Sort Parameters (check config.yml for parameter descriptions)
-# MAX_AGE = config['max_age']   
-# N_INIT =config['n_init']    
-# NMS_MAX_OVERLAP = config['nms_max_overlap']       
-# MAX_COSINE_DISTANCE = config['max_cosine_distance']    
-# NN_BUDGET = config['nn_budget']            
-# OVERRIDE_TRACK_CLASS = config['override_track_class'] 
-# EMBEDDER = config['embedder']
-# HALF = config['half'] 
-# BGR = config['bgr']
-# EMBEDDER_GPU = config['embedder_gpu'] 
-# EMBEDDER_MODEL_NAME = config['embedder_model_name']    
-# EMBEDDER_WTS = config['embedder_wts']           
-# POLYGON = config['polygon']              
-# TODAY = config['today']                  
+MAX_AGE = config['max_age']   
+N_INIT =config['n_init']    
+NMS_MAX_OVERLAP = config['nms_max_overlap']       
+MAX_COSINE_DISTANCE = config['max_cosine_distance']
 
+NN_BUDGET = config['nn_budget']
+if NN_BUDGET == "None":              
+    NN_BUDGET = None
 
-# class DeepSortTracker(): 
+OVERRIDE_TRACK_CLASS = config['override_track_class']
+if OVERRIDE_TRACK_CLASS == "None":              
+    OVERRIDE_TRACK_CLASS = None
 
-#     def __init__(self):
-        
-#         self.algo_name ="DeepSORT"
+EMBEDDER = config['embedder']
+HALF = config['half'] 
+BGR = config['bgr']
+EMBEDDER_GPU = config['embedder_gpu']
 
-#         self.object_tracker = DeepSort(max_age=config['max_age'] ,
-#                 n_init=config['n_init'],
-#                 nms_max_overlap=config['nms_max_overlap'],
-#                 max_cosine_distance=config['max_cosine_distance'],
-#                 nn_budget=config['nn_budget'],
-#                 override_track_class=config['override_track_class'] ,
-#                 embedder=config['embedder'],
-#                 half=config['half'],
-#                 bgr=config['bgr'],
-#                 embedder_gpu=config['embedder_gpu'],
-#                 embedder_model_name=config['embedder_model_name'] ,
-#                 embedder_wts=config['embedder_wts'],
-#                 polygon=config['polygon'],
-#                 today=config['today'])
+EMBEDDER_MODEL_NAME = config['embedder_model_name']
+if EMBEDDER_MODEL_NAME == "None":              
+    EMBEDDER_MODEL_NAME = None
+
+EMBEDDER_WTS = config['embedder_wts'] 
+if EMBEDDER_WTS == "None":              
+    EMBEDDER_WTS = None
+
+POLYGON = config['polygon']
+
+TODAY = config['today']
+if TODAY == "None":              
+    TODAY = None                  
+
 
 # Deep Sort Parameters
-MAX_AGE = 30                 # Maximum number of frames to keep a track alive without new detections. Default is 30
+# MAX_AGE = 1000                 # Maximum number of frames to keep a track alive without new detections. Default is 30
 
-N_INIT =7                  # Minimum number of detections needed to start a new track. Default is 3
+# N_INIT =15                  # Minimum number of detections needed to start a new track. Default is 3
 
-NMS_MAX_OVERLAP = 0.7       # Maximum overlap between bounding boxes allowed for non maximal supression(NMS).
-                            #If two bounding boxes overlap by more than this value, the one with the lower confidence score is suppressed. Defaults to 1.0.
+# NMS_MAX_OVERLAP = 0.95       # Maximum overlap between bounding boxes allowed for non maximal supression(NMS).
+#                             #If two bounding boxes overlap by more than this value, the one with the lower confidence score is suppressed. Defaults to 1.0.
 
-MAX_COSINE_DISTANCE = 0.5   # Maximum cosine distance allowed for matching detections to existing tracks. 
-                            #If the cosine distance between the detection's feature vector and the track's feature vector is higher than this value, 
-                            # the detection is not matched to the track. Defaults to 0.2
+# MAX_COSINE_DISTANCE = 0.1   # Maximum cosine distance allowed for matching detections to existing tracks. 
+#                             #If the cosine distance between the detection's feature vector and the track's feature vector is higher than this value, 
+#                             # the detection is not matched to the track. Defaults to 0.2
 
-NN_BUDGET = None            # Maximum number of features to store in the Nearest Neighbor index. If set to None, the index will have an unlimited budget. 
-                            #This parameter affects the memory usage of the tracker. Defaults to None.
+# NN_BUDGET = None            # Maximum number of features to store in the Nearest Neighbor index. If set to None, the index will have an unlimited budget. 
+#                             #This parameter affects the memory usage of the tracker. Defaults to None.
 
-OVERRIDE_TRACK_CLASS = None  #Optional override for the Track class used by the tracker. This can be used to subclass the Track class and add custom functionality. Defaults to None.
-EMBEDDER = "mobilenet"       #The name of the feature extraction model to use. The options are "mobilenet" or "efficientnet". Defaults to "mobilenet".
-HALF = True                  # Whether to use half-precision floating point format for feature extraction. This can reduce memory usage but may result in lower accuracy. Defaults to True
-BGR = False                   #Whether to use BGR color format for images. If set to False, RGB format will be used. Defaults to True.
-EMBEDDER_GPU = True          #Whether to use GPU for feature extraction. If set to False, CPU will be used. Defaults to True.
-EMBEDDER_MODEL_NAME = None   #Optional model name for the feature extraction model. If not provided, the default model for the selected embedder will be used.
-EMBEDDER_WTS = None          # Optional path to the weights file for the feature extraction model. If not provided, the default weights for the selected embedder will be used.
-POLYGON = False              # Whether to use polygon instead of bounding boxes for tracking. Defaults to False.
-TODAY = None                 # Optional argument to set the current date. This is used to calculate the age of each track in days. If not provided, the current date is used.
+# OVERRIDE_TRACK_CLASS = None  #Optional override for the Track class used by the tracker. This can be used to subclass the Track class and add custom functionality. Defaults to None.
+# EMBEDDER = "mobilenet"       #The name of the feature extraction model to use. The options are "mobilenet" or "efficientnet". Defaults to "mobilenet".
+# HALF = True                  # Whether to use half-precision floating point format for feature extraction. This can reduce memory usage but may result in lower accuracy. Defaults to True
+# BGR = False                   #Whether to use BGR color format for images. If set to False, RGB format will be used. Defaults to True.
+# EMBEDDER_GPU = True          #Whether to use GPU for feature extraction. If set to False, CPU will be used. Defaults to True.
+# EMBEDDER_MODEL_NAME = None   #Optional model name for the feature extraction model. If not provided, the default model for the selected embedder will be used.
+# EMBEDDER_WTS = None          # Optional path to the weights file for the feature extraction model. If not provided, the default weights for the selected embedder will be used.
+# POLYGON = False              # Whether to use polygon instead of bounding boxes for tracking. Defaults to False.
+# TODAY = None                 # Optional argument to set the current date. This is used to calculate the age of each track in days. If not provided, the current date is used.
 
 class DeepSortTracker(): 
 
