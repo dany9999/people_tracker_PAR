@@ -48,7 +48,7 @@ print("Info model_name: {}# dataset: {} # num_label: {} # num_id: {} # ".format(
 # Model and Data
 # ---------
 def load_network(network):   #Carico il modello in base al dataset
-    save_path = os.path.join('checkpoints', dataset, model_name, 'net_last.pth')
+    save_path = os.path.join('src','Person_Attribute_Recognition_MarketDuke_master','checkpoints', dataset, model_name, 'net_last.pth')
     print(save_path)
     network.load_state_dict(torch.load(save_path))
     print('Resume model from {}'.format(save_path))
@@ -59,7 +59,7 @@ def load_image(path):   #carico il path e applico la trasformazione
     src = transforms(src)
     src = src.unsqueeze(dim=0)
     return src
-image_path = "test_sample/test3.jpg"
+image_path = "src/Person_Attribute_Recognition_MarketDuke_master/test_sample/test3.jpg"
 
 model = get_model(model_name, num_label, use_id=use_id, num_id=num_id) #from net, la get model carica la backbone
 model = load_network(model)
@@ -92,9 +92,9 @@ all_pred = { "color of upper-body clothing":"non_set",              # values set
 class predict_decoder(object):
 
     def __init__(self, dataset):
-        with open('./doc/label.json', 'r') as f:
+        with open('src/Person_Attribute_Recognition_MarketDuke_master//doc/label.json', 'r') as f:
             self.label_list = json.load(f)[dataset]
-        with open('./doc/attribute.json', 'r') as f:
+        with open('src/Person_Attribute_Recognition_MarketDuke_master//doc/attribute.json', 'r') as f:
             self.attribute_dict = json.load(f)[dataset]
         self.dataset = dataset
         self.num_label = len(self.label_list)
