@@ -77,6 +77,10 @@ def update_passages_persistence(rois, track, people_dict, previous_roi_status, f
             if not previous_roi_status[i].get(class_id, False):
                 curr_person.roi_passages[i] += 1
                 previous_roi_status[i][class_id] = True
+        else:
+            if previous_roi_status[i].get(class_id, False):
+                previous_roi_status[i][class_id] = False
+        
     return people_dict, previous_roi_status
 
 
