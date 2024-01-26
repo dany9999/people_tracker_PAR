@@ -106,7 +106,7 @@ class DeepSortTracker():
             bbox = location[:4].astype(int)
             bbox_center = ((bbox[0] + bbox[2]) // 2, (bbox[1] + bbox[3]) // 2)
             if int(track_id) == 1:
-                cropped_image = img[bbox[1]:bbox[1] + bbox[3], bbox[0]:bbox[0] + bbox[2]]
+                cropped_image = img[bbox[1]:bbox[3], bbox[0]:bbox[2]]
                 #print([X,Y,W,H])
                 plt.imshow(cropped_image)
                 cv2.imwrite('contour{}.png'.format(track_id), cropped_image)
