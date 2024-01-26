@@ -30,7 +30,9 @@ our_list_duke = [
         "wearing hat",
         "color of lower-body clothing",
         "carrying backpack",
-        "gender"
+        "gender",
+        "carrying bag",
+        "carrying handbag"
 
 ]
 
@@ -50,11 +52,16 @@ class PAR(object):
         num_label, num_id = num_cls_dict[self.dataset], num_ids_dict[self.dataset]
         print("Info model_name: {}# dataset: {} # num_label: {} # num_id: {} # ".format(self.model_name,self.dataset,num_label,num_id))
 
-        self.all_pred = { "color of upper-body clothing":"non_set",              # values set to "non_set" 
-            "wearing hat":"not_set",
-            "color of lower-body clothing":"not_set",
-            "carrying backpack":"not_set",
-            "gender":"not_set"}
+        self.all_pred = { "color of upper-body clothing":None,              # values set to "non_set" 
+            "wearing hat":None,
+            "color of lower-body clothing":None,
+            "carrying backpack":None,
+            "gender":None,
+            "carrying bag": None ,
+            "carrying handbag " : None
+            }
+        self.selected_pred = {"gender": None, "bag": None, "hat": None, "upper_color" : None, "lower_color": None}
+
         self.model = get_model(self.model_name, num_label, use_id=self.use_id, num_id=num_id) #from net, la get model carica la backbone
         self.model = self.load_network(self.model)
         self.model.eval()  #imposta il modello in eval mode.
@@ -87,7 +94,7 @@ class PAR(object):
 # ---------
 
     def attribute_recognition(self,image):
-        # da inserire codice main inferenza
+        
         src = self.load_image(image)   # carica le immaginiclear
         if not self.use_id:
             out = self.model.forward(src)
@@ -100,7 +107,7 @@ class PAR(object):
         self.select_id_prediction()
         self.print_pred(our_list_duke)  # here we print the result of prediction
         #print(pred)
-        return self.all_pred
+        return self.selected_pred
     
 
 
@@ -109,22 +116,52 @@ class PAR(object):
         pred = pred.squeeze(dim=0)
         for idx in range(self.num_label):
             name, chooce = self.attribute_dict[self.label_list[idx]]  
-            if chooce[pred[idx]]:
-                self.all_pred[name] = chooce[pred[idx]]                #set all predicted features in all_pred. NOTE: some features may not be set
+            if chooce[pred[idx]] is not None:
+                if name in our_list_duke:
+                    self.all_pred[name] = chooce[pred[idx]]                #set all predicted features in all_pred. NOTE: some features may not be set
                 #print('{}: {}'.format(name, chooce[pred[idx]]))
+        
 
     def select_id_prediction(self):     #we use backpack_value as representative value of handbag and bag
         bag_value = self.all_pred["carrying bag"]
         handbag_value = self.all_pred["carrying handbag"]
         backpack_value = self.all_pred["carrying backpack"]
         
-        if backpack_value == "no":    #if backpack is no, we check if bag_value is yes or handbag_value is yes to set backpack_value to "yes"
-            if bag_value == "yes":   
-                self.all_pred["backpack"] = "yes"
-            if handbag_value == "yes":
-                self.all_pred["backpack"] = "yes"
+
+        # set fields of selected_pred
+
+        if backpack_value == "yes":    #if backpack is no, we check if bag_value is yes or handbag_value is yes to set backpack_value to "yes"
+            self.selected_pred["bag"] = True
+        elif bag_value == "yes":   
+            self.selected_pred["bag"] = True
+        elif handbag_value == "yes":
+            self.selected_pred["bag"] = True
+
+        else:
+            if(backpack_value is not None or bag_value is not None or handbag_value is not None):
+                self.selected_pred["bag"] = False
+            else:
+                self.selected_pred["bag"] = None
+
+        if self.all_pred["gender"] is not None:
+            self.selected_pred["gender"] = self.all_pred["gender"]
+        
+        if self.all_pred["wearing hat"] is not None:
+            if self.all_pred["wearing hat"] == "yes":
+                self.selected_pred["hat"] = True
+            else:
+                self.selected_pred["hat"] = False
+
+        if self.all_pred["color of upper-body clothing"] is not None:
+            self.selected_pred["upper_color"] = self.all_pred["color of upper-body clothing"]
+
+        if self.all_pred["color of lower-body clothing"] is not None:
+            self.selected_pred["lower_color"] = self.all_pred["color of lower-body clothing"]
+        
+
 
     def print_pred(self,our_list_duke):
         for name in our_list_duke:
-            if self.all_pred[name] != "not_set" :                      #print only the features set
+            if self.all_pred[name] != None :                      #print only the features set
                 print("{} : {}".format(name,self.all_pred[name]))
+        print(self.selected_pred)
