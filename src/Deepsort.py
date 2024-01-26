@@ -3,7 +3,9 @@ import cv2
 import numpy as np
 import yaml
 import matplotlib.pyplot as plt
-import PAR
+from PAR import PAR
+from PIL import Image
+
 with open('config.yml' , 'r') as f:
     config =yaml.safe_load(f)['people_track']['deep_sort']
 
@@ -94,7 +96,7 @@ class DeepSortTracker():
                 today=TODAY)
     
         
-    def display_track(self , track_history , tracks_current , img, box_history):
+    def display_track(self , track_history , tracks_current , img):
         for track in tracks_current:
             if not track.is_confirmed():
                 continue
@@ -106,6 +108,7 @@ class DeepSortTracker():
             bbox_center = ((bbox[0] + bbox[2]) // 2, (bbox[1] + bbox[3]) // 2)
             if int(track_id) == 1:
                 cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
+                cropped_image = Image.fromarray(cropped_image)
                 label = par_attributes.attribute_recognition(cropped_image)
                 print(label)
                 #Azzecchiamo par(cropped_image)
