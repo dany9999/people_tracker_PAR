@@ -64,7 +64,14 @@ while cap.isOpened():
     cv2.putText(img, f'TRACKER: {tracker.algo_name}', (20,100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
     cv2.putText(img, f'DETECTED OBJECTS: {num_objects}', (20,120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
     hf.display_rois(img, rois)
-    cv2.imshow('img',img)
+
+    # Naming a window 
+    cv2.namedWindow("video_show", cv2.WINDOW_NORMAL) 
+  
+    # Using resizeWindow()
+    print(img.shape) 
+    cv2.resizeWindow("video_show", 1080, 1972) 
+    cv2.imshow('video_show',img)
     
     output_video.write(img)
     if cv2.waitKey(1) & 0xFF == 27:
