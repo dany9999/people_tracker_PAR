@@ -67,7 +67,8 @@ while cap.isOpened():
     cv2.imshow('img',img)
     
     output_video.write(img)
-    if cv2.waitKey(1) & 0xFF == 27:
+    k = cv2.waitKey(0)
+    if k == ord("q"):
         break
 
 
