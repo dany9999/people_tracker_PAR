@@ -1,0 +1,6 @@
+1) Need to add PAR to the baseline
+2) Train Detector with our dataset
+    2.1) Need to label our dataset
+3)train the PAR with our dataset
+    3.1) label our dataset
+4) Add attention module ?
