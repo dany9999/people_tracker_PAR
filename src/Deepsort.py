@@ -2,7 +2,7 @@ from deep_sort_realtime.deepsort_tracker import DeepSort
 import cv2
 import numpy as np
 import yaml
-
+import matplotlib.pyplot as plt
 
 with open('config.yml' , 'r') as f:
     config =yaml.safe_load(f)['people_track']['deep_sort']
@@ -105,7 +105,11 @@ class DeepSortTracker():
             location = track.to_tlbr()
             bbox = location[:4].astype(int)
             bbox_center = ((bbox[0] + bbox[2]) // 2, (bbox[1] + bbox[3]) // 2)
-
+            if int(track_id) == 1:
+                cropped_image = img[bbox[1]:bbox[1] + bbox[3], bbox[0]:bbox[0] + bbox[2]]
+                #print([X,Y,W,H])
+                plt.imshow(cropped_image)
+                cv2.imwrite('contour{}.png'.format(track_id), cropped_image)
             # Retrieve the previous center location, if available
             prev_centers = track_history.get(track_id ,[])
             prev_centers.append(bbox_center)
