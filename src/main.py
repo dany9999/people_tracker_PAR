@@ -4,8 +4,8 @@ import os
 import sys
 import yaml
 import helper_functions as hf
-from PIL import Image
-from PAR import PAR
+
+
 from Deepsort import DeepSortTracker
 from dataloader import cap
 from YoloV5 import YOLOv5Detector
@@ -30,7 +30,7 @@ track_history = {}    # Define a empty dictionary to store the previous center l
 
 
 fourcc = cv2.VideoWriter_fourcc(*'XVID')  # Puoi scegliere un altro codec se necessario
-output_video = cv2.VideoWriter('results/output_video_2.avi', fourcc, 30.0, (1972, 1080))  # Imposta la risoluzione desiderata
+output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 30.0, (1972, 1080))  # Imposta la risoluzione desiderata
 
 
 previous_roi_status = [{}, {}]
@@ -47,8 +47,8 @@ while cap.isOpened():
     results = object_detector.run_yolo(img)  # run the yolo v5 object detector 
     detections , num_objects= object_detector.extract_detections(results, img, height=img.shape[0], width=img.shape[1]) # Plot the bounding boxes and extract detections (needed for DeepSORT) and number of relavent objects detected
     # Object Tracking
-    tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)
-    tracker.display_track(track_history, tracks_current, img)
+    tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)#
+    tracker.display_track(track_history , tracks_current , img)
     #Count metrics for ROI
     people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS))
     # FPS Calculation
@@ -67,19 +67,14 @@ while cap.isOpened():
     cv2.imshow('img',img)
     
     output_video.write(img)
-    k = cv2.waitKey(0)
-    if k == ord("q"):
+    if cv2.waitKey(1) & 0xFF == 27:
         break
 
-
+    
 
 
 # Release and destroy all windows before termination
-#cap.release()
-#output_video.release()
-#cv2.destroyAllWindows()
-#hf.create_the_output_file(people_dict, 'results/results.txt')
-
-par = PAR()
-src = Image.open("src/test_sample/2.jpg")
-dict = par.attribute_recognition(src)
+cap.release()
+output_video.release()
+cv2.destroyAllWindows()
+hf.create_the_output_file(people_dict, 'data/results.txt')
