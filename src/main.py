@@ -47,7 +47,7 @@ while cap.isOpened():
     results = object_detector.run_yolo(img)  # run the yolo v5 object detector 
     detections , num_objects= object_detector.extract_detections(results, img, height=img.shape[0], width=img.shape[1]) # Plot the bounding boxes and extract detections (needed for DeepSORT) and number of relavent objects detected
     # Object Tracking
-    if count % 30 == 0:
+    if count % 10 == 0:
         tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)#
         tracker.display_track(track_history , tracks_current , img)
         #Count metrics for ROI
@@ -71,7 +71,7 @@ while cap.isOpened():
     output_video.write(img)
     if cv2.waitKey(1) & 0xFF == 27:
         break
-count = count +1 
+    count = count + 1 
     
 
 
