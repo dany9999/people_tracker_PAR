@@ -107,12 +107,24 @@ class DeepSortTracker():
             location = track.to_tlbr()
             bbox = location[:4].astype(int)
             bbox_center = ((bbox[0] + bbox[2]) // 2, (bbox[1] + bbox[3]) // 2)
+            # Controllo dei limiti del bounding box
+            ymin = max(0, bbox[1])
+            xmin = max(0, bbox[0])
+            ymax = min(img.shape[0], bbox[3])
+            xmax = min(img.shape[1], bbox[2])
+            
+            # Cropping dell'immagine
+            cropped_image = img[ymin:ymax, xmin:xmax]
+            # Conversione dell'immagine in un oggetto di tipo PIL
+            cropped_image_pil = Image.fromarray(cropped_image)
+            
+            # Riconoscimento degli attributi PAR sull'immagine ritagliata
+            label = self.par_attributes.attribute_recognition(cropped_image_pil)
+
             #if int(track_id) == 1:
-            cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
-            check_image = len(cropped_image)
-            if check_image != 0:
-                cropped_image = Image.fromarray(cropped_image)
-                label = self.par_attributes.attribute_recognition(cropped_image)
+            #cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
+            #cropped_image = Image.fromarray(cropped_image)
+            #label = self.par_attributes.attribute_recognition(cropped_image)
                 #print(label)
                 #Azzecchiamo par(cropped_image)
                 #plt.imshow(cropped_image)
@@ -136,7 +148,6 @@ class DeepSortTracker():
             if DISP_OBJ_TRACK_BOX == True: 
                 cv2.rectangle(img,(int(bbox[0]), int(bbox[1])),(int(bbox[2]), int(bbox[3])),(0,0,255),1)
                 cv2.putText(img, "ID: " + str(track_id), (int(bbox[0]), int(bbox[1] - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
-                if check_image != 0:
-                    cv2.putText(img, "PAR: " + str(label), (int(bbox[0]), int(bbox[1] - 25)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
+                cv2.putText(img, "PAR: " + str(label), (int(bbox[0]), int(bbox[1] - 25)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
                 # ADD THE PAR RESULTS TO every ID (PERSON TRACKED)
             
