@@ -101,7 +101,7 @@ class PAR(object):
         else:
             out, _ = self.model.forward(src)
 
-        pred = torch.gt(out, torch.ones_like(out)/3 )  # change denominator to change the threshold, now is 1/3 = 0.333 
+        pred = torch.gt(out, torch.ones_like(out)*0.5)  # change denominator to change the threshold, now is 1/3 = 0.333 
         #Dec = PAR(self.dataset) 
         self.decode(pred)
         self.select_id_prediction()
@@ -119,7 +119,7 @@ class PAR(object):
             if chooce[pred[idx]] is not None:
                 if name in our_list_duke:
                     self.all_pred[name] = chooce[pred[idx]]                #set all predicted features in all_pred. NOTE: some features may not be set
-                #print('{}: {}'.format(name, chooce[pred[idx]]))
+            
         
 
     def select_id_prediction(self):     #we use backpack_value as representative value of handbag and bag
@@ -164,4 +164,4 @@ class PAR(object):
         for name in our_list_duke:
             if self.all_pred[name] != None :                      #print only the features set
                 print("{} : {}".format(name,self.all_pred[name]))
-        print(self.selected_pred)
+       

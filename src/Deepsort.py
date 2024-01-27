@@ -93,15 +93,16 @@ class DeepSortTracker():
                 embedder_model_name=EMBEDDER_MODEL_NAME,
                 embedder_wts=EMBEDDER_WTS,
                 polygon=POLYGON,
-                today=TODAY)
+                today=TODAY
+                )
+        self.par_attributes = PAR()
     
         
     def display_track(self , track_history , tracks_current , img):
         for track in tracks_current:
             if not track.is_confirmed():
                 continue
-            track_id = track.track_id
-            par_attributes = PAR()  
+            track_id = track.track_id  
             # Retrieve the current track location(i.e - center of the bounding box) and bounding box
             location = track.to_tlbr()
             bbox = location[:4].astype(int)
@@ -109,7 +110,7 @@ class DeepSortTracker():
             if int(track_id) == 1:
                 cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
                 cropped_image = Image.fromarray(cropped_image)
-                label = par_attributes.attribute_recognition(cropped_image)
+                label = self.par_attributes.attribute_recognition(cropped_image)
                 #print(label)
                 #Azzecchiamo par(cropped_image)
                 #plt.imshow(cropped_image)
