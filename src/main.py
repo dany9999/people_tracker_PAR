@@ -37,7 +37,7 @@ previous_roi_status = [{}, {}]
 people_dict = {}
 rois = hf.parse_config_file("data/config.txt", cap)
 
-
+count = 0
 while cap.isOpened():       
     success, img = cap.read() # Read the image frame from data source
     if not success:
@@ -47,10 +47,11 @@ while cap.isOpened():
     results = object_detector.run_yolo(img)  # run the yolo v5 object detector 
     detections , num_objects= object_detector.extract_detections(results, img, height=img.shape[0], width=img.shape[1]) # Plot the bounding boxes and extract detections (needed for DeepSORT) and number of relavent objects detected
     # Object Tracking
-    tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)#
-    tracker.display_track(track_history , tracks_current , img)
-    #Count metrics for ROI
-    people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS))
+    if count % 30 == 0:
+        tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)#
+        tracker.display_track(track_history , tracks_current , img)
+        #Count metrics for ROI
+        people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS))
     # FPS Calculation
     end_time = time.perf_counter()
     total_time = end_time - start_time
@@ -70,7 +71,7 @@ while cap.isOpened():
     output_video.write(img)
     if cv2.waitKey(1) & 0xFF == 27:
         break
-
+count = count +1 
     
 
 
