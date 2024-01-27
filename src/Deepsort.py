@@ -107,10 +107,10 @@ class DeepSortTracker():
             location = track.to_tlbr()
             bbox = location[:4].astype(int)
             bbox_center = ((bbox[0] + bbox[2]) // 2, (bbox[1] + bbox[3]) // 2)
-            if int(track_id) == 1:
-                cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
-                cropped_image = Image.fromarray(cropped_image)
-                label = self.par_attributes.attribute_recognition(cropped_image)
+            #if int(track_id) == 1:
+            cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
+            cropped_image = Image.fromarray(cropped_image)
+            label = self.par_attributes.attribute_recognition(cropped_image)
                 #print(label)
                 #Azzecchiamo par(cropped_image)
                 #plt.imshow(cropped_image)

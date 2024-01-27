@@ -105,7 +105,7 @@ class PAR(object):
         #Dec = PAR(self.dataset) 
         self.decode(pred)
         self.select_id_prediction()
-        self.print_pred(our_list_duke)  # here we print the result of prediction
+        #self.print_pred(our_list_duke)  # here we print the result of prediction
         #print(pred)
         return self.selected_pred
     
@@ -163,5 +163,5 @@ class PAR(object):
     def print_pred(self,our_list_duke):
         for name in our_list_duke:
             if self.all_pred[name] != None :                      #print only the features set
-                #print("{} : {}".format(name,self.all_pred[name]))
+                print("{} : {}".format(name,self.all_pred[name]))
        
