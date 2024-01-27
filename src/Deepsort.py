@@ -110,7 +110,7 @@ class DeepSortTracker():
                 cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
                 cropped_image = Image.fromarray(cropped_image)
                 label = par_attributes.attribute_recognition(cropped_image)
-                print(label)
+                #print(label)
                 #Azzecchiamo par(cropped_image)
                 #plt.imshow(cropped_image)
                 #cv2.imwrite('contour{}.png'.format(track_id), cropped_image)
@@ -133,5 +133,6 @@ class DeepSortTracker():
             if DISP_OBJ_TRACK_BOX == True: 
                 cv2.rectangle(img,(int(bbox[0]), int(bbox[1])),(int(bbox[2]), int(bbox[3])),(0,0,255),1)
                 cv2.putText(img, "ID: " + str(track_id), (int(bbox[0]), int(bbox[1] - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
+                cv2.putText(img, "PAR: " + str(label), (int(bbox[0]), int(bbox[1] - 25)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
                 # ADD THE PAR RESULTS TO every ID (PERSON TRACKED)
             
