@@ -108,45 +108,27 @@ class DeepSortTracker():
             location = track.to_tlbr()
             bbox = location[:4].astype(int)
             bbox_center = ((bbox[0] + bbox[2]) // 2, (bbox[1] + bbox[3]) // 2)
-            # Controllo dei limiti del bounding box
-            ymin = max(0, bbox[1])
-            xmin = max(0, bbox[0])
-            ymax = min(img.shape[0], bbox[3])
-            xmax = min(img.shape[1], bbox[2])
+            # # Controllo dei limiti del bounding box
+            # ymin = max(0, bbox[1])
+            # xmin = max(0, bbox[0])
+            # ymax = min(img.shape[0], bbox[3])
+            # xmax = min(img.shape[1], bbox[2])
             
-            # Cropping dell'immagine
-            cropped_image = img[ymin:ymax, xmin:xmax]
-            # Conversione dell'immagine in un oggetto di tipo PIL
-            cropped_image_pil = Image.fromarray(cropped_image)
-            
+            #Create list in dictonary
             if track_id not in self.id_PAR_label.keys(): 
                 self.id_PAR_label[track_id] = list()
             
             # Riconoscimento degli attributi PAR sull'immagine ritagliata
             if len(self.id_PAR_label[track_id]) < 3:
-
+                cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
+                cropped_image_pil = Image.fromarray(cropped_image)
                 self.id_PAR_label[track_id].append(self.par_attributes.attribute_recognition(cropped_image_pil))
                 
-            print("{} : {}".format(track_id, len(self.id_PAR_label[track_id])))
-
-            #if int(track_id) == 1:
-            #cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
-            #cropped_image = Image.fromarray(cropped_image)
-            #label = self.par_attributes.attribute_recognition(cropped_image)
-                #print(label)
-                #Azzecchiamo par(cropped_image)
-                #plt.imshow(cropped_image)
-                #cv2.imwrite('contour{}.png'.format(track_id), cropped_image)
 
             # Retrieve the previous center location, if available
             prev_centers = track_history.get(track_id ,[])
             prev_centers.append(bbox_center)
             track_history[track_id] = prev_centers
-
-            # 1) TAKE EVERY frame of a given PERSON, pass it to the PAR take the results. We can analize a max of 5 frame for person and compare results of each other
-            # 2) Save 5 frame in a dictonary of each person in a dictonary, then pass it to the PAR, then compare results, then add results on frame
-
-
 
             # Draw the track line, if there is a previous center location
             if prev_centers is not None and DISP_TRACKS == True:
@@ -156,6 +138,11 @@ class DeepSortTracker():
             if DISP_OBJ_TRACK_BOX == True: 
                 cv2.rectangle(img,(int(bbox[0]), int(bbox[1])),(int(bbox[2]), int(bbox[3])),(0,0,255),1)
                 cv2.putText(img, "ID: " + str(track_id), (int(bbox[0]), int(bbox[1] - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
-                cv2.putText(img, "PAR: " + str(self.id_PAR_label[track_id][0]), (int(bbox[0]), int(bbox[1] - 25)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
+                cv2.putText(img, "gender:{}".format(self.id_PAR_label[track_id][0]["gender"]), (int(bbox[0]), int(bbox[1] + 25)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
+                cv2.putText(img, "up:{}".format(self.id_PAR_label[track_id][0]["upper_color"]), (int(bbox[0]), int(bbox[1] + 35)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
+                cv2.putText(img, "low:{}".format(self.id_PAR_label[track_id][0]["lower_color"]), (int(bbox[0]), int(bbox[1] + 45)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
+                cv2.putText(img, "bag:{}".format(self.id_PAR_label[track_id][0]["bag"]), (int(bbox[0]), int(bbox[1] + 55)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
+                cv2.putText(img, "hat:{}".format(self.id_PAR_label[track_id][0]["hat"]), (int(bbox[0]), int(bbox[1] + 65)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
+
                 # ADD THE PAR RESULTS TO every ID (PERSON TRACKED)
                        
