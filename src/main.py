@@ -9,6 +9,7 @@ import helper_functions as hf
 from Deepsort import DeepSortTracker
 from dataloader import cap
 from YoloV5 import YOLOv5Detector
+import json
 # Parameters from config.yml file
 with open('config.yml' , 'r') as f:
     config =yaml.safe_load(f)['people_track']['main']
@@ -30,7 +31,7 @@ track_history = {}    # Define a empty dictionary to store the previous center l
 
 
 fourcc = cv2.VideoWriter_fourcc(*'XVID')  # Puoi scegliere un altro codec se necessario
-output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 30.0, (1972, 1080))  # Imposta la risoluzione desiderata
+output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 30.0, (1920, 1080))  # Imposta la risoluzione desiderata
 
 
 previous_roi_status = [{}, {}]
@@ -44,14 +45,14 @@ while cap.isOpened():
         
     if not success:
         break    
-    if count % 5 == 0: 
+    if count % 20 == 0: 
         start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
         # Object Detection
         results = object_detector.run_yolo(img)  # run the yolo v5 object detector 
         detections , num_objects= object_detector.extract_detections(results, img, height=img.shape[0], width=img.shape[1]) # Plot the bounding boxes and extract detections (needed for DeepSORT) and number of relavent objects detected
         # Object Tracking
         
-        tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)#
+        tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)
         tracker.display_track(track_history , tracks_current , img)
         #Count metrics for ROI
         people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS))
@@ -59,7 +60,6 @@ while cap.isOpened():
         end_time = time.perf_counter()
         total_time = end_time - start_time
         fps = 1 / total_time
-        
     
     # Descriptions on the output visualization
     
@@ -78,11 +78,14 @@ while cap.isOpened():
     if cv2.waitKey(1) & 0xFF == 27:
         break
     count = count +1 
-    
+
+tf = open("results/PAR_pred.json", "w")
+json.dump(tracker.id_PAR_label, tf, indent= 2)
+tf.close()    
 
 
 # Release and destroy all windows before termination
 cap.release()
 output_video.release()
 cv2.destroyAllWindows()
-hf.create_the_output_file(people_dict, 'results/results.txt')
+hf.create_the_output_file(people_dict, 'results/results.json')

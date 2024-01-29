@@ -48,6 +48,8 @@ def parse_config_file(roi_file_path, cap):
 
 def update_people_dict(people_dict, tracks_current, rois, previous_roi_status, fps):
     for track in tracks_current:
+        if not track.is_confirmed():
+                continue
         if people_dict.get(track.track_id) is None:
             # So far instantiate only with id, later can be with other tracked attributes
             people_dict[track.track_id] = TrackedPerson(track.track_id)
@@ -88,6 +90,6 @@ def create_the_output_file(people_dict, file_path):
     people_list = [value.to_dict() for value in people_dict.values()]
     results_dict = {"people": people_list}
     with open(file_path, 'w') as file:
-        json.dump(results_dict, file)
+        json.dump(results_dict, file, indent= 2)
         
 
