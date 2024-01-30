@@ -23,9 +23,8 @@ transforms = T.Compose([                   #Trasformazioni da applicare all'inpu
     T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 ])
 
-#image_path = "test_sample/test3.jpg" # sarebbe image imput
 
-our_list_duke = [          
+our_list_duke = [                           #si puo togliere
         "color of upper-body clothing",
         "wearing hat",
         "color of lower-body clothing",
@@ -40,11 +39,11 @@ our_list_duke = [
 
 class PAR(object):
 
-    def __init__(self):
+    def __init__(self, dataset):
         ######################################################################
         # Argument
         # ---------
-        self.dataset = "duke" 
+        self.dataset = dataset
         #model_name = '{}_nfc_id'.format('resnet50') if False else '{}_nfc'.format(args.backbone) #aggiusta la stringa in base all'uso dell'id.... {}_nfc_id formattaizone stringhe in python
         self.model_name = '{}_nfc'.format('resnet50')  #con id
         self.use_id = False
@@ -52,7 +51,7 @@ class PAR(object):
         num_label, num_id = num_cls_dict[self.dataset], num_ids_dict[self.dataset]
         print("Info model_name: {}# dataset: {} # num_label: {} # num_id: {} # ".format(self.model_name,self.dataset,num_label,num_id))
 
-        self.all_pred = { "color of upper-body clothing":None,              # values set to "non_set" 
+        self.all_pred = { "color of upper-body clothing":None,              # si puo togliere 
             "wearing hat":None,
             "color of lower-body clothing":None,
             "carrying backpack":None,
@@ -71,6 +70,8 @@ class PAR(object):
         with open('src/doc/attribute.json', 'r') as f:
             self.attribute_dict = json.load(f)[self.dataset]
         self.num_label = len(self.label_list)
+        self.result_dict = {}                       #dict risultante definitivo
+
 
     ######################################################################
     # Model and Data
@@ -102,11 +103,18 @@ class PAR(object):
             out, _ = self.model.forward(src)
 
         pred = torch.gt(out, torch.ones_like(out)*0.5)  # change denominator to change the threshold, now is 1/3 = 0.333 
-        #Dec = PAR(self.dataset) 
+        #Dec = PAR(self.dataset)
         self.decode(pred)
         self.select_id_prediction()
         #self.print_pred(our_list_duke)  # here we print the result of prediction
-        #print(pred)
+        
+        
+        # for idx in range(self.num_label):
+        #     name = self.label_list[idx]
+        #     self.result_dict[name] = out[0, idx].item()  # Aggiungere il valore da out al dizionario
+        
+        #print(self.selected_pred)
+        #print(self.selected_pred)
         return self.selected_pred
     
 
