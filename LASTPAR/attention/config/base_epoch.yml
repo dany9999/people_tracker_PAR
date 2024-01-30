@@ -1,0 +1,127 @@
+# timezone, it will use to get run_id
+timezone: Asia/Ho_Chi_Minh
+
+# training type
+type: epoch
+
+model:
+  name: baseline
+  # backbone support: [osnet, resnet50, resnet101, resnet50_nl, resnet101_nl, resnet50_ibn_a, resnet101_ibn_a, resnet50_ibn_a_nl, resnet101_ibn_a_nl]
+  # nl: https://arxiv.org/abs/1711.07971
+  # ibn_a: https://github.com/XingangPan/IBN-Net
+  backbone: resnet50
+  pretrained: True
+  # global pooling support: [avg_pooling, gem_pooling, max_pooling]
+  pooling: gem_pooling
+  pooling_size: 1
+  # head support: [BNHead, ReductionHead]
+  head: BNHead
+  # bn_where before or after of liner layer
+  bn_where: after
+  # set bias of batch norm in head layer
+  batch_norm_bias: True
+  # using tqdm process bar when download pretrained model
+  use_tqdm: True
+
+data:
+  # folder will save data
+  data_dir: "data_dir"
+  # name of dataset: [peta, pa100k, ppe, ppe_two]
+  name: peta
+  image_size: [256, 192]
+  batch_size: 32
+  shuffle: True
+  num_workers: 4
+  pin_memory: True
+  drop_last: True
+
+# optimizer support: [adam, sgd]
+optimizer:
+  name: adam
+  lr: 0.00035
+  specified_lr:
+    enable: False
+    lr: 0.1
+    layers: [head]
+  default:
+    adam:
+      weight_decay: 0.0005
+      beta1: 0.9
+      beta2: 0.99
+    sgd:
+      momentum: 0.9
+      weight_decay: 0.0005
+      dampening: 0
+      nesterov: False
+
+# loss support: [BCEWithLogitsLoss, CEL_Sigmoid, Non_BCEWithLogitsLoss]
+loss:
+  name: CEL_Sigmoid
+  default:
+    CEL_Sigmoid:
+      reduction: sum
+    Singular_BCE:
+      reduction: sum
+    FocalLoss:
+      alpha: 1
+      gamma: 2.5
+      reduction: sum
+    CEL_Sigmoid_Smooth:
+      epsilon: 0.1
+      reduction: sum
+
+# freeze <layers> at first <epochs>.
+freeze:
+  enable: False
+  layers: [backbone]
+  epochs: 10
+
+# learning rate scheduler. if you not config manual parameters, it will get from default, corresponding name
+lr_scheduler:
+  enable: False
+  name: MultiStepLR
+  start: 1
+  default:
+    WarmupMultiStepLR:
+      steps: [40, 90]
+      gamma: 0.1
+      warmup_factor: 0.01
+      warmup_iters: 10
+      warmup_method: linear
+    ReduceLROnPlateau:
+      factor: 0.1
+      patience: 10
+      min_lr: 0.0000001
+    MultiStepLR:
+      steps: [40, 70]
+      gamma: 0.1
+    WarmupCosineAnnealingLR:
+      max_iters: 120
+      delay_iters: 30
+      eta_min_lr: 0.00000077
+      warmup_factor: 0.01
+      warmup_iters: 10
+      warmup_method: linear
+    CosineAnnealingLR:
+      max_iters: 120
+      eta_min_lr: 0.00000077
+
+# Gradient accumulation
+iters_to_accumulate: 1
+
+# clipping gradient
+clip_grad_norm_:
+  enable: False
+  max_norm: 10.0
+
+# use_tqdm: use tqdm process bar when training.
+trainer:
+  # 0 if using cpu. > 0 if using gpu
+  n_gpu: 1
+  # maximum epoch
+  epochs: 100
+  # saved log folder
+  checkpoint_dir: saved/checkpoints
+  log_dir: saved/logs
+  output_dir: saved/outputs
+  use_tqdm: True
