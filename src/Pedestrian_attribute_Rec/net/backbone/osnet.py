@@ -7,7 +7,7 @@ import torch.nn as nn
 from torch.nn import init
 from torch.nn import functional as F
 
-from utils import summary
+from utils2 import summary
 
 __all__ = ["osnet"]
 

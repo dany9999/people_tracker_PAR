@@ -8,7 +8,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-from utils import summary
+from utils2 import summary
 
 
 class Efficient(nn.Module):

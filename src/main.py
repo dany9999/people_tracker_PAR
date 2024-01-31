@@ -4,11 +4,11 @@ import os
 import sys
 import yaml
 import helper_functions as hf
-#from PAR_detector import PAR_detector
 
+from PAR_detector import PAR_detector
 from Deepsort import DeepSortTracker
 from dataloader import cap
-from YoloV5 import YOLOv5Detector
+from Detection.YoloV5 import YOLOv5Detector
 import json
 # Parameters from config.yml file
 with open('config.yml' , 'r') as f:
@@ -26,7 +26,9 @@ DISP_OBJ_COUNT = config['disp_obj_count']
 
 object_detector = YOLOv5Detector(model_name=MODEL_NAME)
 tracker = DeepSortTracker()
-#par_detector = PAR_detector()
+
+
+par_detector = PAR_detector()
 
 track_history = {}    # Define a empty dictionary to store the previous center locations for each track ID
 
@@ -46,7 +48,7 @@ while cap.isOpened():
 
     if not success:
         break    
-    if count % 1 == 0: 
+    if count % 3 == 0: 
         start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
         # Object Detection
         results = object_detector.run_yolo(img)  # run the yolo v5 object detector 
@@ -55,7 +57,7 @@ while cap.isOpened():
         
         tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)
         tracker.display_track(track_history , tracks_current , img)
-        #par_detector.par_detection(tracks_current, img)
+        par_detector.par_detection(tracks_current, img)
 
         #Count metrics for ROI
         people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS))
@@ -82,9 +84,9 @@ while cap.isOpened():
         break
     count = count +1 
 
-#tf = open("results/PAR_pred_duke.json", "w")
-#json.dump(par_detector.id_PAR_label, tf, indent= 2)
-#tf.close()    
+tf = open("results/PAR_pred_duke.json", "w")
+json.dump(par_detector.id_PAR_label, tf, indent= 2)
+tf.close()    
  
 
 # Release and destroy all windows before termination

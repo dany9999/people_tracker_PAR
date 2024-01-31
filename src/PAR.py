@@ -175,7 +175,7 @@
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__))))
+#sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__))))
 
 import torch
 import pickle
@@ -188,8 +188,8 @@ import numpy as np
 from PIL import Image
 from torchvision import transforms
 
-from Pedestrian_attribute_Rec.models import build_model
-from Pedestrian_attribute_Rec.utils import read_config
+from Pedestrian_attribute_Rec.net import build_model
+from Pedestrian_attribute_Rec.utils2 import read_config
 
 
 
@@ -301,7 +301,3 @@ class PAR():
         
 
 
-img = Image.open("train_image/15.jpg")
-par = PAR()
-result = par.get_par(img)
-print(result)

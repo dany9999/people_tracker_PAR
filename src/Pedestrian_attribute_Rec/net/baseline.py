@@ -6,11 +6,11 @@ sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), ".."))
 import torch
 import torch.nn as nn
 
-from utils import summary
-from models.pooling import build_pooling
-from models.head import build_head
-from models.backbone import build_backbone
-from models.util import *
+from utils2 import summary
+from net.pooling import build_pooling
+from net.head import build_head
+from net.backbone import build_backbone
+from net.util import *
 
 
 class Baseline(nn.Module):

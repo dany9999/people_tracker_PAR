@@ -3,8 +3,8 @@ import sys
 
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", ".."))
 
-from models.head.bn_head import BNHead
-from models.head.reduction_head import ReductionHead
+from net.head.bn_head import BNHead
+from net.head.reduction_head import ReductionHead
 
 
 def build_head(

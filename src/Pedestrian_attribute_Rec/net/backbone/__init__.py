@@ -3,14 +3,14 @@ import sys
 
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", ".."))
 
-from models.backbone.resnet import *
-from models.backbone.resnet_nl import *
-from models.backbone.resnet_ibn_a import *
-from models.backbone.resnet_ibn_a_nl import *
-from models.backbone.osnet import *
-from models.backbone.vgg import *
-from models.backbone.eficientnet import Efficient
-from models.backbone.timm_extractor import TimmModel
+from net.backbone.resnet import *
+from net.backbone.resnet_nl import *
+from net.backbone.resnet_ibn_a import *
+from net.backbone.resnet_ibn_a_nl import *
+from net.backbone.osnet import *
+from net.backbone.vgg import *
+from net.backbone.eficientnet import Efficient
+from net.backbone.timm_extractor import TimmModel
 
 __backbones = {
     "osnet": (osnet, 512),
@@ -48,7 +48,7 @@ def build_backbone(name, pretrained=True, progress=True):
 
 if __name__ == "__main__":
     import torch
-    from utils import summary
+    from utils2 import summary
 
     model, feature_dim = build_backbone("tim/tf_efficientnet_b2_ns")
     result = summary(
