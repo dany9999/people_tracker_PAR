@@ -117,7 +117,7 @@ class DeepSortTracker():
                 cv2.polylines(img, [points], False, (51 ,225, 255), 2)
 
             if DISP_OBJ_TRACK_BOX == True: 
-                cv2.rectangle(img,(int(bbox[0]), int(bbox[1])),(int(bbox[2]), int(bbox[3])),(0,0,255),1)
+                #cv2.rectangle(img,(int(bbox[0]), int(bbox[1])),(int(bbox[2]), int(bbox[3])),(0,0,255),1)
                 cv2.putText(img, "ID: " + str(track_id), (int(bbox[0]), int(bbox[1] - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
                
 

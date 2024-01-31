@@ -197,7 +197,7 @@ class PAR():
     def __init__(self):
         self.path_config = "src/Pedestrian_attribute_Rec/config/base_extraction.yml"
         self.path_attribute = "src/Pedestrian_attribute_Rec/attributenew.pkl"
-        self.path_model = "src/Pedestrian_attribute_Rec/model_best_accuracy.pth"
+        self.path_model = "src/Pedestrian_attribute_Rec/model_best_f1_score.pth"
 
         config = read_config(self.path_config, False)
 

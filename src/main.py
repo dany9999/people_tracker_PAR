@@ -34,7 +34,7 @@ track_history = {}    # Define a empty dictionary to store the previous center l
 
 
 fourcc = cv2.VideoWriter_fourcc(*'XVID')  # Puoi scegliere un altro codec se necessario
-output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 10.0, (1972, 1080))  # Imposta la risoluzione desiderata
+output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 10.0, (1920, 1080))  # Imposta la risoluzione desiderata
 
 
 previous_roi_status = [{}, {}]
@@ -48,7 +48,7 @@ while cap.isOpened():
 
     if not success:
         break    
-    if count % 3 == 0: 
+    if count % 1 == 0: 
         start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
         # Object Detection
         results = object_detector.run_yolo(img)  # run the yolo v5 object detector 
@@ -116,6 +116,7 @@ def tuple_con_valori_piu_frequenti(lista_di_tuple):
 
     # Itera attraverso la lista di tuple e aggiorna le frequenze
     for tupla in lista_di_tuple:
+        
         frequenze['gender'][tupla[0]] += 1
         frequenze['hat'][tupla[1]] += 1
         frequenze['bag'][tupla[2]] += 1
