@@ -215,12 +215,9 @@ class PAR():
         self.model.to(device)
         
         #self.model = model
-        self.selected_pred = {"gender": None, "bag": None, "hat": None, "upper_color" : None, "lower_color": None}
+        
 
-    def get_par(self,image):
-        attribute = self.attribute_recognition(image)
-        self.select_id_prediction(attribute)
-        return self.selected_pred
+   
 
     def attribute_recognition(self,image):
         
@@ -245,7 +242,6 @@ class PAR():
             #out[out <= 0.3] = 0
             #out[(out <= 0.7) & (out >= 0.3)] = 1
             attribute = list(zip(self.attribute_name, out.tolist())) #Ritorna un dizionario coi valori float
-            print(attribute)
             return attribute
 
     def formatta(self,stringa,prefisso):
@@ -273,24 +269,33 @@ class PAR():
             if out[idx][1] > lower_color[1]:
                 lower_color = out[idx]
 
-        self.selected_pred["upper_color"] = self.formatta(upper_color[0],prefissosu)
-        self.selected_pred["lower_color"] = self.formatta(lower_color[0],prefissogiu)
+        upper_color = self.formatta(upper_color[0],prefissosu)
+        lower_color = self.formatta(lower_color[0],prefissogiu)
 
         if backpack > 0.35 or bag > 0.35:         # gestione zaino NOTE Threshold da impostare col modello buono
-            self.selected_pred["bag"] = True
+            bag = True
         else:
-            self.selected_pred["bag"] = False
+            bag = False
         
         if hat > 0.3:                          # gestione hat
-            self.selected_pred["hat"] = True
+            hat = True
         else:
-            self.selected_pred["hat"] = False
+            hat = False
         
         if male > female:                       # gestione gender
-            self.selected_pred["gender"] = "Male"
+            gender = "Male"
         else:
-            self.selected_pred["gender"] = "Female"
+            gender = "Female"
 
+        
+        lista = [gender,upper_color,lower_color,bag,hat]
+        tupla = tuple(lista)
+        return tupla
+        
+    def get_par(self,image):
+        attribute = self.attribute_recognition(image)
+        tupla = self.select_id_prediction(attribute)
+        return tupla
          #ricorda di settare i colori in self.pred
 
     # result = extractor(args.config, image, 2)
