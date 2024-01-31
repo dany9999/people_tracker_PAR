@@ -26,7 +26,7 @@ DISP_OBJ_COUNT = config['disp_obj_count']
 
 object_detector = YOLOv5Detector(model_name=MODEL_NAME)
 tracker = DeepSortTracker()
-par_detector = PAR_detector("duke")
+par_detector = PAR_detector()
 
 track_history = {}    # Define a empty dictionary to store the previous center locations for each track ID
 
