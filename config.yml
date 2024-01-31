@@ -3,7 +3,7 @@ people_track:
  detector:
   model_name: 'yolov5x6'
   tracked_class: 'person'
-  downscale_factor: 2
+  downscale_factor: 1
   confidence_threshold: 0.5
   disp_obj_detect_box: False   # Set to true if you want to view the detections from object detector  NOTE: Green 
  
@@ -37,7 +37,7 @@ people_track:
 
   data_source : "video file"   # source can be set to either "video file" or "webcam"
   webcam_id : 2                # if using external webcam. Please modify based on your system
-  data_path: "./data/video_3.mp4" # path to the video file if you are using a video as input
+  data_path: "./data/video_3_3.mp4" # path to the video file if you are using a video as input
   frame_width:  640
   frame_height:  640
  

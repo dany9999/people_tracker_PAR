@@ -34,7 +34,7 @@ track_history = {}    # Define a empty dictionary to store the previous center l
 
 
 fourcc = cv2.VideoWriter_fourcc(*'XVID')  # Puoi scegliere un altro codec se necessario
-output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 30.0, (1920, 1080))  # Imposta la risoluzione desiderata
+output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 10.0, (1972, 1080))  # Imposta la risoluzione desiderata
 
 
 previous_roi_status = [{}, {}]
@@ -87,10 +87,61 @@ while cap.isOpened():
 tf = open("results/PAR_pred_duke.json", "w")
 json.dump(par_detector.id_PAR_label, tf, indent= 2)
 tf.close()    
- 
+
+
+
 
 # Release and destroy all windows before termination
 cap.release()
 output_video.release()
 cv2.destroyAllWindows()
 hf.create_the_output_file(people_dict, 'results/results.json')
+
+
+
+def definitivo(id_PAR_label):
+    for key in id_PAR_label.keys():
+        
+        print("{}: ".format(key))
+        print(tuple_con_valori_piu_frequenti(id_PAR_label[key]))
+        print("----------------------")
+
+
+
+
+def tuple_con_valori_piu_frequenti(lista_di_tuple):
+    # Inizializza un dizionario per tenere traccia delle frequenze di ciascun elemento
+    frequenze = {'gender': Counter(), 'hat': Counter(), 'bag': Counter(),
+                 'color_up': Counter(), 'color_low': Counter()}
+
+    # Itera attraverso la lista di tuple e aggiorna le frequenze
+    for tupla in lista_di_tuple:
+        frequenze['gender'][tupla[0]] += 1
+        frequenze['hat'][tupla[1]] += 1
+        frequenze['bag'][tupla[2]] += 1
+        frequenze['color_up'][tupla[3]] += 1
+        frequenze['color_low'][tupla[4]] += 1
+
+    # Inizializza una tupla con i valori più frequenti
+    tupla_valori_piu_frequenti = (
+        frequenze['gender'].most_common(1)[0][0],
+        frequenze['hat'].most_common(1)[0][0],
+        frequenze['bag'].most_common(1)[0][0],
+        frequenze['color_up'].most_common(1)[0][0],
+        frequenze['color_low'].most_common(1)[0][0]
+    )
+
+    return tupla_valori_piu_frequenti
+
+# Esempio di utilizzo
+# lista_di_tuple = [(True, False, True, 'red', 'blue'),
+#                   (False, True, True, 'green', 'red'),
+#                   (True, False, False, 'red', 'blue'),
+#                   # Aggiungi altre tuple secondo necessità
+#                  ]
+
+# risultato = tuple_con_valori_piu_frequenti(lista_di_tuple)
+# print(risultato)
+
+from collections import Counter
+definitivo(par_detector.id_PAR_label)
