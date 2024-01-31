@@ -217,6 +217,10 @@ class PAR():
         #self.model = model
         self.selected_pred = {"gender": None, "bag": None, "hat": None, "upper_color" : None, "lower_color": None}
 
+    def get_par(self,image):
+        attribute = self.attribute_recognition(image)
+        self.select_id_prediction(attribute)
+        return self.selected_pred
 
     def attribute_recognition(self,image):
         
@@ -243,8 +247,6 @@ class PAR():
             attribute = list(zip(self.attribute_name, out.tolist())) #Ritorna un dizionario coi valori float
             print(attribute)
             return attribute
-            # select_id_prediction(out)
-            #return self.selected_pred
 
     def formatta(self,stringa,prefisso):
     
@@ -295,10 +297,7 @@ class PAR():
     # result = extractor(path_config=args.config, path_attribute='peta_attribute.pkl', path_model="/content/drive/Shared drives/REID/HIEN/Models/OSNet_Person_Attribute_Refactor/checkpoints/0731_232453/model_best_accuracy.pth", image=image, return_type=0)
 
 
-    def get_par(self,image):
-        attribute = self.attribute_recognition(image)
-        self.select_id_prediction(attribute)
-        return self.selected_pred
+    
         
 
 

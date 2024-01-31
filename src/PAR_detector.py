@@ -34,7 +34,7 @@ class PAR_detector:
             try:
                 cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
                 cropped_image_pil = Image.fromarray(cropped_image)
-                self.id_PAR_label[track_id].append(self.par.attribute_recognition(cropped_image_pil))
+                self.id_PAR_label[track_id].append(self.par.get_par(cropped_image_pil))
             
             
                 cv2.putText(img, "gender:{}".format(self.id_PAR_label[track_id][0]["gender"]), (int(bbox[0]), int(bbox[1] + 25)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)    
