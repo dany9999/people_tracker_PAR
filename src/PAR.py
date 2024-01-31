@@ -205,9 +205,9 @@ class PAR():
         device = torch.device("cuda:0" if use_gpu else "cpu")
         map_location = "cuda:0" if use_gpu else torch.device("cpu")
 
-        attribute_name = pickle.load(open(self.path_attribute, "rb"))
+        self.attribute_name = pickle.load(open(self.path_attribute, "rb"))
 
-        self.model, _ = build_model(config, num_classes=len(attribute_name))
+        self.model, _ = build_model(config, num_classes=len(self.attribute_name))
         checkpoint = torch.load(self.path_model, map_location=map_location)
 
         self.model.load_state_dict(checkpoint["state_dict"])
@@ -234,20 +234,75 @@ class PAR():
             out = self.model(image)
             out = torch.squeeze(out)
             out = torch.sigmoid(out)
+            
+            out = out.cpu().detach().numpy()
+            
+            #out[out > 0.7] = 2
+            #out[out <= 0.3] = 0
+            #out[(out <= 0.7) & (out >= 0.3)] = 1
+            attribute = list(zip(self.attribute_name, out.tolist())) #Ritorna un dizionario coi valori float
+            print(attribute)
+            return attribute
             # select_id_prediction(out)
             #return self.selected_pred
 
+    def formatta(self,stringa,prefisso):
+    
+        # Rimuovi i prefissi
+        stringa_tagliata = stringa.replace(prefisso, "")
+        return stringa_tagliata
+
+
     def select_id_prediction(self, out):
-         pass
-         
+        backpack = out[0][1]
+        bag = out[4][1]
+        hat = out[2][1]
+        male = out[3][1]
+        female = out[-1][1]  # Considerando che l'elemento relativo a "personalFemale" è l'ultimo nella lista
+        upper_color = out[5]
+        lower_color = out[16]
+        prefissogiu = "lowerBody"
+        prefissosu = "upperBody"
+        for idx in range(6, 15):  # Gestione upper_color
+            if out[idx][1] > upper_color[1]:
+                upper_color = out[idx]
+
+        for idx in range(17, 26):  # Gestione lower_color
+            if out[idx][1] > lower_color[1]:
+                lower_color = out[idx]
+
+        self.selected_pred["upper_color"] = self.formatta(upper_color[0],prefissosu)
+        self.selected_pred["lower_color"] = self.formatta(lower_color[0],prefissogiu)
+
+        if backpack > 0.35 or bag > 0.35:         # gestione zaino NOTE Threshold da impostare col modello buono
+            self.selected_pred["bag"] = True
+        else:
+            self.selected_pred["bag"] = False
+        
+        if hat > 0.3:                          # gestione hat
+            self.selected_pred["hat"] = True
+        else:
+            self.selected_pred["hat"] = False
+        
+        if male > female:                       # gestione gender
+            self.selected_pred["gender"] = "Male"
+        else:
+            self.selected_pred["gender"] = "Female"
+
+         #ricorda di settare i colori in self.pred
 
     # result = extractor(args.config, image, 2)
     # result = extractor(path_config=args.config, path_attribute='peta_attribute.pkl', path_model="/content/drive/Shared drives/REID/HIEN/Models/OSNet_Person_Attribute_Refactor/checkpoints/0731_232453/model_best_accuracy.pth", image=image, return_type=0)
 
 
+    def get_par(self,image):
+        attribute = self.attribute_recognition(image)
+        self.select_id_prediction(attribute)
+        return self.selected_pred
+        
 
-img = Image.open("train_image/1.jpg")
+
+img = Image.open("train_image/15.jpg")
 par = PAR()
-result = par.attribute_recognition(img)
-
+result = par.get_par(img)
 print(result)
