@@ -52,11 +52,11 @@ class Display():
 
 
     def display_PAR(self,img,id_PAR_label, track_id,bbox):
-        cv2.putText(img, "gender:{}".format(id_PAR_label[track_id][0][0]), (int(bbox[0]), int(bbox[1] + 25)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)    
-        cv2.putText(img, "up:{}".format(id_PAR_label[track_id][0][1]), (int(bbox[0]), int(bbox[1] + 35)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
-        cv2.putText(img, "low:{}".format(id_PAR_label[track_id][0][2]), (int(bbox[0]), int(bbox[1] + 45)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
-        cv2.putText(img, "bag:{}".format(id_PAR_label[track_id][0][3]), (int(bbox[0]), int(bbox[1] + 55)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
-        cv2.putText(img, "hat:{}".format(id_PAR_label[track_id][0][4]), (int(bbox[0]), int(bbox[1] + 65)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)    
+        cv2.putText(img, "gender:{}".format(id_PAR_label[track_id][-1][0]), (int(bbox[0]), int(bbox[1] + 25)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)    
+        cv2.putText(img, "up:{}".format(id_PAR_label[track_id][-1][1]), (int(bbox[0]), int(bbox[1] + 50)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
+        cv2.putText(img, "low:{}".format(id_PAR_label[track_id][-1][2]), (int(bbox[0]), int(bbox[1] + 100)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
+        cv2.putText(img, "bag:{}".format(id_PAR_label[track_id][-1][3]), (int(bbox[0]), int(bbox[1] + 140)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
+        cv2.putText(img, "hat:{}".format(id_PAR_label[track_id][-1][4]), (int(bbox[0]), int(bbox[1] + 180)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)    
 
     def display_rois(self, img, rois):
         cv2.rectangle(img, rois[0][0], rois[0][1], (255,0,0), 1)
