@@ -57,9 +57,7 @@ def update_people_dict(people_dict, tracks_current, rois, previous_roi_status, f
     return people_dict, previous_roi_status  
 
 
-def display_rois(img, rois):
-    cv2.rectangle(img, rois[0][0], rois[0][1], (255,0,0), 1)
-    cv2.rectangle(img, rois[1][0], rois[1][1], (0,255,0), 1)
+
 
 def update_passages_persistence(rois, track, people_dict, previous_roi_status, fps):
     # Check if object center is inside ROI1 and update counters

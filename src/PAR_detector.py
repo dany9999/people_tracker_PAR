@@ -42,8 +42,6 @@ class PAR_detector:
             # cv2.putText(img, "low:{}".format(self.id_PAR_label[track_id][0][2]), (int(bbox[0]), int(bbox[1] + 45)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
             # cv2.putText(img, "bag:{}".format(self.id_PAR_label[track_id][0][3]), (int(bbox[0]), int(bbox[1] + 55)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
             # cv2.putText(img, "hat:{}".format(self.id_PAR_label[track_id][0][4]), (int(bbox[0]), int(bbox[1] + 65)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
-        #return self.id_PAR_label
+        return self.id_PAR_label
 
     
-
-

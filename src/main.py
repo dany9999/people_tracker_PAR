@@ -10,6 +10,7 @@ from Deepsort import DeepSortTracker
 from dataloader import cap
 from Detection.YoloV5 import YOLOv5Detector
 import json
+from Dispaly import Display
 # Parameters from config.yml file
 with open('config.yml' , 'r') as f:
     config =yaml.safe_load(f)['people_track']['main']
@@ -26,9 +27,9 @@ DISP_OBJ_COUNT = config['disp_obj_count']
 
 object_detector = YOLOv5Detector(model_name=MODEL_NAME)
 tracker = DeepSortTracker()
-
-
 par_detector = PAR_detector()
+display = Display()
+
 
 track_history = {}    # Define a empty dictionary to store the previous center locations for each track ID
 
@@ -48,19 +49,24 @@ while cap.isOpened():
 
     if not success:
         break    
-    if count % 1 == 0: 
+    if count % 10 == 0: 
         start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
         # Object Detection
         results = object_detector.run_yolo(img)  # run the yolo v5 object detector 
         detections , num_objects= object_detector.extract_detections(results, img, height=img.shape[0], width=img.shape[1]) # Plot the bounding boxes and extract detections (needed for DeepSORT) and number of relavent objects detected
         # Object Tracking
-        
         tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)
-        tracker.display_track(track_history , tracks_current , img)
-        par_detector.par_detection(tracks_current, img)
-
+        
+        #PAR detection
+        id_PAR_label = par_detector.par_detection(tracks_current, img)
+        #tracker.display_track(track_history , tracks_current , img)
+        
+        #Display GUI
+        display.display_all(tracks_current, track_history,img, id_PAR_label, rois)
+        
         #Count metrics for ROI
         people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS))
+        
         # FPS Calculation
         end_time = time.perf_counter()
         total_time = end_time - start_time
@@ -75,7 +81,7 @@ while cap.isOpened():
         # cv2.putText(img, f'TRACKED CLASS: {object_detector.tracked_class}', (20,80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
         # cv2.putText(img, f'TRACKER: {tracker.algo_name}', (20,100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
         # cv2.putText(img, f'DETECTED OBJECTS: {num_objects}', (20,120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
-        hf.display_rois(img, rois)
+        #hf.display_rois(img, rois)
         cv2.imshow('video_show',img)
         output_video.write(img)
     
@@ -134,15 +140,8 @@ def tuple_con_valori_piu_frequenti(lista_di_tuple):
 
     return tupla_valori_piu_frequenti
 
-# Esempio di utilizzo
-# lista_di_tuple = [(True, False, True, 'red', 'blue'),
-#                   (False, True, True, 'green', 'red'),
-#                   (True, False, False, 'red', 'blue'),
-#                   # Aggiungi altre tuple secondo necessità
-#                  ]
-
-# risultato = tuple_con_valori_piu_frequenti(lista_di_tuple)
-# print(risultato)
 
 from collections import Counter
 definitivo(par_detector.id_PAR_label)
+
+
