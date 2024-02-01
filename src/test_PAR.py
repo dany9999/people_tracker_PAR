@@ -1,38 +1,38 @@
 
-from Pedestrian_attribute_Rec import PAR
+from . import PAR
 from PIL import Image
 
-duke = PAR("duke")
-market = PAR("market")
-pred = {'backpack': None,
-         'bag': None, 
-         'handbag': None, 
-         'hat':None, 
-         'gender': None, 
-         'upblack': None, 
-         'upwhite': None, 
-         'upred': None, 
-         'uppurple': None, 
-         'upyellow': None, 
-         'upgray': None, 
-         'upblue':None, 
-         'upgreen': None,
-         'upbrown': None,
-         'uppink': None,
-         'uporange': None,
+# duke = PAR("duke")
+# market = PAR("market")
+# pred = {'backpack': None,
+#          'bag': None, 
+#          'handbag': None, 
+#          'hat':None, 
+#          'gender': None, 
+#          'upblack': None, 
+#          'upwhite': None, 
+#          'upred': None, 
+#          'uppurple': None, 
+#          'upyellow': None, 
+#          'upgray': None, 
+#          'upblue':None, 
+#          'upgreen': None,
+#          'upbrown': None,
+#          'uppink': None,
+#          'uporange': None,
           
-         'downblack': None, 
-         'downwhite': None, 
-         'downpink': None, 
-         'downpurple': None, 
-         'downyellow': None, 
-         'downgray': None, 
-         'downblue': None, 
-         'downgreen': None, 
-         'downbrown': None,
-         '
-         'downred': None   
-        }
+#          'downblack': None, 
+#          'downwhite': None, 
+#          'downpink': None, 
+#          'downpurple': None, 
+#          'downyellow': None, 
+#          'downgray': None, 
+#          'downblue': None, 
+#          'downgreen': None, 
+#          'downbrown': None,
+#          '
+#          'downred': None   
+#         }
 
 
 

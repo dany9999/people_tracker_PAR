@@ -49,7 +49,7 @@ while cap.isOpened():
 
     if not success:
         break    
-    if count % 10 == 0: 
+    if count % 5 == 0: 
         start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
         # Object Detection
         results = object_detector.run_yolo(img)  # run the yolo v5 object detector 
@@ -101,47 +101,17 @@ tf.close()
 cap.release()
 output_video.release()
 cv2.destroyAllWindows()
+
+hf.set_person_attributes(people_dict, par_detector.PAR_common_solution())
 hf.create_the_output_file(people_dict, 'results/results.json')
 
 
 
-def definitivo(id_PAR_label):
-    for key in id_PAR_label.keys():
-        
-        print("{}: ".format(key))
-        print(tuple_con_valori_piu_frequenti(id_PAR_label[key]))
-        print("----------------------")
+
+print(par_detector.PAR_common_solution())
 
 
 
 
-def tuple_con_valori_piu_frequenti(lista_di_tuple):
-    # Inizializza un dizionario per tenere traccia delle frequenze di ciascun elemento
-    frequenze = {'gender': Counter(), 'hat': Counter(), 'bag': Counter(),
-                 'color_up': Counter(), 'color_low': Counter()}
-
-    # Itera attraverso la lista di tuple e aggiorna le frequenze
-    for tupla in lista_di_tuple:
-        
-        frequenze['gender'][tupla[0]] += 1
-        frequenze['hat'][tupla[1]] += 1
-        frequenze['bag'][tupla[2]] += 1
-        frequenze['color_up'][tupla[3]] += 1
-        frequenze['color_low'][tupla[4]] += 1
-
-    # Inizializza una tupla con i valori più frequenti
-    tupla_valori_piu_frequenti = (
-        frequenze['gender'].most_common(1)[0][0],
-        frequenze['hat'].most_common(1)[0][0],
-        frequenze['bag'].most_common(1)[0][0],
-        frequenze['color_up'].most_common(1)[0][0],
-        frequenze['color_low'].most_common(1)[0][0]
-    )
-
-    return tupla_valori_piu_frequenti
-
-
-from collections import Counter
-definitivo(par_detector.id_PAR_label)
 
 

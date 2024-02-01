@@ -1,13 +1,14 @@
 from PAR import PAR
 from PIL import Image
 import cv2
-
+from collections import Counter
 
 class PAR_detector:
 
     def __init__(self) :
         self.par = PAR()
         self.id_PAR_label = {}
+        self.common_solution = {}
 
 
     def par_detection(self,tracks_current,img):
@@ -29,19 +30,45 @@ class PAR_detector:
                 self.id_PAR_label[track_id] = list()
 
             # Riconoscimento degli attributi PAR sull'immagine ritagliata
-            #if len(self.id_PAR_label[track_id]) < 10:
-            try:
-                    cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
-                    cropped_image_pil = Image.fromarray(cropped_image)
-                    self.id_PAR_label[track_id].append(self.par.get_par(cropped_image_pil))
-            except:
-                    pass
-                        
-            # cv2.putText(img, "gender:{}".format(self.id_PAR_label[track_id][0][0]), (int(bbox[0]), int(bbox[1] + 25)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)    
-            # cv2.putText(img, "up:{}".format(self.id_PAR_label[track_id][0][1]), (int(bbox[0]), int(bbox[1] + 35)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
-            # cv2.putText(img, "low:{}".format(self.id_PAR_label[track_id][0][2]), (int(bbox[0]), int(bbox[1] + 45)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
-            # cv2.putText(img, "bag:{}".format(self.id_PAR_label[track_id][0][3]), (int(bbox[0]), int(bbox[1] + 55)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
-            # cv2.putText(img, "hat:{}".format(self.id_PAR_label[track_id][0][4]), (int(bbox[0]), int(bbox[1] + 65)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,255), 1)
+            if len(self.id_PAR_label[track_id]) < 10:
+                try:
+                        cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
+                        cropped_image_pil = Image.fromarray(cropped_image)
+                        self.id_PAR_label[track_id].append(self.par.get_par(cropped_image_pil))
+                except:
+                        pass
+                            
         return self.id_PAR_label
 
-    
+
+    def PAR_common_solution(self):
+        for key in self.id_PAR_label.keys():
+            
+            self.common_solution[key] = self.frequency_PAR(self.id_PAR_label[key])
+        return self.common_solution    
+
+    def frequency_PAR(self, list_prediction):
+        
+        # Inizializza un dizionario per tenere traccia delle frequenze di ciascun elemento
+        frequency = {'gender': Counter(), 'hat': Counter(), 'bag': Counter(),
+                    'color_up': Counter(), 'color_low': Counter()}
+
+        # Itera attraverso la lista di tuple e aggiorna le frequenze
+        for pred in list_prediction:
+            
+            frequency['gender'][pred[0]] += 1
+            frequency['hat'][pred[1]] += 1
+            frequency['bag'][pred[2]] += 1
+            frequency['color_up'][pred[3]] += 1
+            frequency['color_low'][pred[4]] += 1
+
+        # Inizializza una tupla con i valori più frequenti
+        best_freq_pred = (
+            frequency['gender'].most_common(1)[0][0],
+            frequency['hat'].most_common(1)[0][0],
+            frequency['bag'].most_common(1)[0][0],
+            frequency['color_up'].most_common(1)[0][0],
+            frequency['color_low'].most_common(1)[0][0]
+        )
+
+        return best_freq_pred 

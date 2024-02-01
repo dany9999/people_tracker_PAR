@@ -61,3 +61,4 @@ class Display():
     def display_rois(self, img, rois):
         cv2.rectangle(img, rois[0][0], rois[0][1], (255,0,0), 1)
         cv2.rectangle(img, rois[1][0], rois[1][1], (0,255,0), 1)
+

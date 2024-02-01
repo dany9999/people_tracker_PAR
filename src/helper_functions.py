@@ -89,5 +89,15 @@ def create_the_output_file(people_dict, file_path):
     results_dict = {"people": people_list}
     with open(file_path, 'w') as file:
         json.dump(results_dict, file, indent= 2)
+
+
+
+def set_person_attributes( people_dict, PAR_common_solutions):
+    for id in people_dict.keys():
+        people_dict[id].gender = PAR_common_solutions[id][0]
+        people_dict[id].upper_color = PAR_common_solutions[id][1]
+        people_dict[id].lower_color = PAR_common_solutions[id][2]
+        people_dict[id].bag = PAR_common_solutions[id][3]
+        people_dict[id].hat = PAR_common_solutions[id][4]
         
 
