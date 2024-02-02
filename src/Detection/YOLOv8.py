@@ -53,6 +53,7 @@ class YOLOv8Detector():
         class_count = 0         # Initialize class count for the frame 
         #num_objects = len(boxes)   #extract the number of objects detected
         #x_shape, y_shape = width, height
+        
         conf = boxes.conf.tolist()[0]
         boxes = boxes.xyxy.tolist()
 

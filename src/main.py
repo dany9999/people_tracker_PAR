@@ -50,24 +50,26 @@ while cap.isOpened():
     
     if not success:
         break    
-    if count % 3 == 0: 
+    if count % 1 == 0: 
         start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
         # Object Detection
+        
         results = object_detector.run_yolo(img)  # run the yolo v5 object detector 
-        detections , num_objects= object_detector.extract_detections(results, img, height=img.shape[0], width=img.shape[1]) # Plot the bounding boxes and extract detections (needed for DeepSORT) and number of relavent objects detected
-        # Object Tracking
-        tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)
+        if len(results) !=0:
+            detections , num_objects= object_detector.extract_detections(results, img, height=img.shape[0], width=img.shape[1]) # Plot the bounding boxes and extract detections (needed for DeepSORT) and number of relavent objects detected
+            # Object Tracking
+            tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)
 
        
-        #PAR detection
-        id_PAR_label = par_detector.par_detection(tracks_current, img)
-        #tracker.display_track(track_history , tracks_current , img)
+            #PAR detection
+            id_PAR_label = par_detector.par_detection(tracks_current, img)
+            #tracker.display_track(track_history , tracks_current , img)
         
-        #Display GUI
-        display.display_all(tracks_current, track_history,img, id_PAR_label, rois)
+            #Display GUI
+            display.display_all(tracks_current, track_history,img, id_PAR_label, rois)
         
-        #Count metrics for ROI
-        people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS))
+            #Count metrics for ROI
+            people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS))
         
         # FPS Calculation
         end_time = time.perf_counter()
