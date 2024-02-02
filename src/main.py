@@ -36,11 +36,12 @@ track_history = {}    # Define a empty dictionary to store the previous center l
 
 
 fourcc = cv2.VideoWriter_fourcc(*'XVID')  # Puoi scegliere un altro codec se necessario
-output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 10.0, (1920, 1080))  # Imposta la risoluzione desiderata
+output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 30.0, (1920, 1080))  # Imposta la risoluzione desiderata
 
 
 previous_roi_status = [{}, {}]
 people_dict = {}
+id_PAR_label = {}
 rois = hf.parse_config_file("data/config.txt", cap)
 tt_s = time.perf_counter()
 count = 0
@@ -60,11 +61,11 @@ while cap.isOpened():
             # Object Tracking
             tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)
 
-       
-            #PAR detection
-            id_PAR_label = par_detector.par_detection(tracks_current, img)
-            #tracker.display_track(track_history , tracks_current , img)
-        
+            if count % 30 == 0 and count !=0:       
+                #PAR detection
+                id_PAR_label = par_detector.par_detection(tracks_current, img)
+                #tracker.display_track(track_history , tracks_current , img)
+            
             #Display GUI
             display.display_all(tracks_current, track_history,img, id_PAR_label, rois)
         
