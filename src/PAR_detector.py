@@ -30,13 +30,13 @@ class PAR_detector:
                 self.id_PAR_label[track_id] = list()
 
             # Riconoscimento degli attributi PAR sull'immagine ritagliata
-            if len(self.id_PAR_label[track_id]) < 10:
+            if len(self.id_PAR_label[track_id]) < 30:
                 try:
-                        cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
-                        cropped_image_pil = Image.fromarray(cropped_image)
-                        self.id_PAR_label[track_id].append(self.par.get_par(cropped_image_pil))
+                    cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
+                    cropped_image_pil = Image.fromarray(cropped_image)
+                    self.id_PAR_label[track_id].append(self.par.get_par(cropped_image_pil))
                 except:
-                        pass
+                    pass
                             
         return self.id_PAR_label
 

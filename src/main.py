@@ -51,7 +51,7 @@ while cap.isOpened():
     
     if not success:
         break    
-    if count % 1 == 0: 
+    if count % 10 == 0: 
         start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
         # Object Detection
         
@@ -60,11 +60,10 @@ while cap.isOpened():
             detections , num_objects= object_detector.extract_detections(results, img, height=img.shape[0], width=img.shape[1]) # Plot the bounding boxes and extract detections (needed for DeepSORT) and number of relavent objects detected
             # Object Tracking
             tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)
-
-            if count % 30 == 0 and count !=0:       
-                #PAR detection
-                id_PAR_label = par_detector.par_detection(tracks_current, img)
-                #tracker.display_track(track_history , tracks_current , img)
+      
+            #PAR detection
+            id_PAR_label = par_detector.par_detection(tracks_current, img)
+            #tracker.display_track(track_history , tracks_current , img)
             
             #Display GUI
             display.display_all(tracks_current, track_history,img, id_PAR_label, rois)
@@ -87,7 +86,8 @@ while cap.isOpened():
         # cv2.putText(img, f'TRACKER: {tracker.algo_name}', (20,100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
         # cv2.putText(img, f'DETECTED OBJECTS: {num_objects}', (20,120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
         #hf.display_rois(img, rois)
-        cv2.imshow('video_show',img)
+        resized_img = cv2.resize(img, (1280, 720))
+        cv2.imshow('video_show',resized_img)
         output_video.write(img)
     
    
