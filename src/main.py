@@ -51,7 +51,7 @@ while cap.isOpened():
     
     if not success:
         break    
-    if count % 10 == 0: 
+    if count % 6 == 0: 
         start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
         # Object Detection
         
@@ -89,7 +89,7 @@ while cap.isOpened():
         resized_img = cv2.resize(img, (1280, 720))
         cv2.imshow('video_show',resized_img)
         output_video.write(img)
-    
+        
    
     if cv2.waitKey(1) & 0xFF == 27:
         break

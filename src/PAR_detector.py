@@ -30,7 +30,7 @@ class PAR_detector:
                 self.id_PAR_label[track_id] = list()
 
             # Riconoscimento degli attributi PAR sull'immagine ritagliata
-            if len(self.id_PAR_label[track_id]) < 30:
+            if len(self.id_PAR_label[track_id]) < 10:
                 try:
                     cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
                     cropped_image_pil = Image.fromarray(cropped_image)
@@ -42,9 +42,11 @@ class PAR_detector:
 
 
     def PAR_common_solution(self):
-        for key in self.id_PAR_label.keys():
-            
-            self.common_solution[key] = self.frequency_PAR(self.id_PAR_label[key])
+        self.common_solution = {}
+
+        for key, predictions in self.id_PAR_label.items():
+            self.common_solution[key] = self.frequency_PAR(predictions)
+
         return self.common_solution    
 
     def frequency_PAR(self, list_prediction):
