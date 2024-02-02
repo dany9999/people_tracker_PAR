@@ -66,7 +66,7 @@ while cap.isOpened():
             #tracker.display_track(track_history , tracks_current , img)
             
             #Display GUI
-            display.display_all(tracks_current, track_history,img, id_PAR_label, rois)
+            display.display_all(tracks_current, track_history,img, id_PAR_label, rois, previous_roi_status)
         
             #Count metrics for ROI
             people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS))
@@ -88,8 +88,8 @@ while cap.isOpened():
         #hf.display_rois(img, rois)
         resized_img = cv2.resize(img, (1280, 720))
         cv2.imshow('video_show',resized_img)
-        output_video.write(img)
-        
+    output_video.write(img)
+
    
     if cv2.waitKey(1) & 0xFF == 27:
         break
