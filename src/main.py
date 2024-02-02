@@ -9,6 +9,7 @@ from PAR_detector import PAR_detector
 from Deepsort import DeepSortTracker
 from dataloader import cap
 from Detection.YoloV5 import YOLOv5Detector
+from Detection.YOLOv8 import YOLOv8Detector
 import json
 from Dispaly import Display
 # Parameters from config.yml file
@@ -25,7 +26,7 @@ MODEL_NAME = config['model_name']
 DISP_FPS = config['disp_fps'] 
 DISP_OBJ_COUNT = config['disp_obj_count']
 
-object_detector = YOLOv5Detector(model_name=MODEL_NAME)
+object_detector = YOLOv8Detector(model_name=MODEL_NAME)
 tracker = DeepSortTracker()
 par_detector = PAR_detector()
 display = Display()
@@ -35,7 +36,7 @@ track_history = {}    # Define a empty dictionary to store the previous center l
 
 
 fourcc = cv2.VideoWriter_fourcc(*'XVID')  # Puoi scegliere un altro codec se necessario
-# output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 10.0, (1920, 1080))  # Imposta la risoluzione desiderata
+output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 10.0, (1920, 1080))  # Imposta la risoluzione desiderata
 
 
 previous_roi_status = [{}, {}]
@@ -84,7 +85,7 @@ while cap.isOpened():
         # cv2.putText(img, f'DETECTED OBJECTS: {num_objects}', (20,120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
         #hf.display_rois(img, rois)
         cv2.imshow('video_show',img)
-        # output_video.write(img)
+        output_video.write(img)
     
    
     if cv2.waitKey(1) & 0xFF == 27:
@@ -100,7 +101,7 @@ while cap.isOpened():
 
 # Release and destroy all windows before termination
 cap.release()
-# output_video.release()
+output_video.release()
 cv2.destroyAllWindows()
 
 hf.set_person_attributes(people_dict, par_detector.PAR_common_solution())

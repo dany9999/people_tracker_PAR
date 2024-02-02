@@ -51,8 +51,8 @@ class YOLOv8Detector():
         
         detections = []         # Empty list to store the detections later 
         class_count = 0         # Initialize class count for the frame 
-        num_objects = len(boxes)   #extract the number of objects detected
-        x_shape, y_shape = width, height
+        #num_objects = len(boxes)   #extract the number of objects detected
+        #x_shape, y_shape = width, height
         conf = boxes.conf.tolist()[0]
         boxes = boxes.xyxy.tolist()
 
@@ -62,6 +62,7 @@ class YOLOv8Detector():
                       
             if DISP_OBJ_DETECT_BOX: 
                 self.plot_boxes(x1 , y1 , x2 , y2 , frame)
+            
             x_center = x1 + ((x2-x1)/2)
             y_center = y1 + ((y2 - y1) / 2)
             #conf_val = float(box[0][4].item())
