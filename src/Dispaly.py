@@ -18,7 +18,7 @@ class Display():
     def __init__(self) :
         pass
     
-    def display_all(self, tracks_current, track_history,img, id_PAR_label, rois, previous_roi_status):        
+    def display_all(self, tracks_current, track_history,img, id_PAR_label, rois, previous_roi_status, count):        
         self.display_rois(img, rois)
         cnt = 0
         for track in tracks_current:
@@ -46,7 +46,8 @@ class Display():
                 else:
                     bbox_color = (0, 0, 255)
             self.display_track(img, prev_centers, bbox, track_id, bbox_color)
-            self.display_PAR(img,id_PAR_label, track_id,bbox)
+            if count % 30:
+                self.display_PAR(img,id_PAR_label, track_id,bbox)
         self.draw_total_info_rectangle(img, previous_roi_status, cnt)
     
     def display_track(self , img, prev_centers, bbox, track_id, color):

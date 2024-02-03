@@ -45,13 +45,16 @@ id_PAR_label = {}
 rois = hf.parse_config_file("data/config.txt", cap)
 tt_s = time.perf_counter()
 count = 0
+
+
+
 while cap.isOpened():
           
     success, img = cap.read() # Read the image frame from data source
     
     if not success:
         break    
-    if count % 6 == 0: 
+    if count % 1 == 0: 
         start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
         # Object Detection
         
@@ -60,13 +63,13 @@ while cap.isOpened():
             detections , num_objects= object_detector.extract_detections(results, img, height=img.shape[0], width=img.shape[1]) # Plot the bounding boxes and extract detections (needed for DeepSORT) and number of relavent objects detected
             # Object Tracking
             tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)
-      
-            #PAR detection
-            id_PAR_label = par_detector.par_detection(tracks_current, img)
-            #tracker.display_track(track_history , tracks_current , img)
-            
+
+            if count % 30 == 0:   
+                #PAR detection
+                id_PAR_label = par_detector.par_detection(tracks_current, img)
+                #tracker.display_track(track_history , tracks_current , img)
             #Display GUI
-            display.display_all(tracks_current, track_history,img, id_PAR_label, rois, previous_roi_status)
+            display.display_all(tracks_current, track_history,img, id_PAR_label, rois, previous_roi_status, count)
         
             #Count metrics for ROI
             people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS))
@@ -75,7 +78,7 @@ while cap.isOpened():
         end_time = time.perf_counter()
         total_time = end_time - start_time
         fps = 1 / total_time
-    
+        fps = cap.get(cv2.CAP_PROP_FPS)
     # Descriptions on the output visualization
     
     
@@ -95,9 +98,9 @@ while cap.isOpened():
         break
     count = count +1 
 
-# tf = open("results/PAR_pred_duke.json", "w")
-# json.dump(par_detector.id_PAR_label, tf, indent= 2)
-# tf.close()    
+tf = open("results/PAR_pred_duke.json", "w")
+json.dump(par_detector.id_PAR_label, tf, indent= 2)
+tf.close()    
 
 
 
@@ -107,7 +110,7 @@ cap.release()
 output_video.release()
 cv2.destroyAllWindows()
 
-hf.set_person_attributes(people_dict, par_detector.PAR_common_solution())
+#hf.set_person_attributes(people_dict, par_detector.PAR_common_solution())
 hf.create_the_output_file(people_dict, 'results/results.json')
 
 
