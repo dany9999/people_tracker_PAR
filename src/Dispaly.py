@@ -16,6 +16,8 @@ OBJ_TRACK_BOX_COLOR = tuple(config['obj_track_box_color'])
 
 class Display():
     def __init__(self) :
+        self.total_roi1_passages = 0
+        self.total_roi2_passages = 0
         pass
     
     def display_all(self, tracks_current, track_history,img, id_PAR_label, rois, previous_roi_status, count):        
@@ -62,7 +64,6 @@ class Display():
                 self.display_id(img, track_id, int(bbox[0]), int(bbox[1]), color)
 
 
-
     def display_id(self, img, track_id, x_large, y_large, color_large):
         x_small, y_small, w_small, h_small = x_large, y_large, 30, 40  # Example coordinates, adjust as needed
         color_white = (255, 255, 255)  # White color in BGR format
@@ -95,13 +96,13 @@ class Display():
         people_in_roi1 = sum([value for value in previous_roi_status[0].values() if value])
         people_in_roi2 = sum([value for value in previous_roi_status[1].values() if value])
         people_in_roi = people_in_roi1 + people_in_roi2
-         
+        self.total_roi1_passages += people_in_roi1
+        self.total_roi2_passages += people_in_roi2
         cv2.rectangle(img, (0, 0),  (box_width, box_height), color, thickness=cv2.FILLED)
         cv2.putText(img, "People in ROI:{}".format(people_in_roi), (box_x + text_x_offset, box_y + text_y_offset + int(box_height*0.2)), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0,0,0), 1)    
         cv2.putText(img, "Total people:{}".format(cnt), (box_x + text_x_offset, box_y + text_y_offset + int(box_height*0.4)), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0,0,0), 1)    
-        cv2.putText(img, "People in ROI 1:{}".format(people_in_roi1), (box_x + text_x_offset, box_y + text_y_offset + int(box_height*0.6)), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0,0,0), 1)    
-        cv2.putText(img, "People in ROI 2:{}".format(people_in_roi2), (box_x + text_x_offset, box_y + text_y_offset + int(box_height*0.8)), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0,0,0), 1)    
-
+        cv2.putText(img, "Passages in ROI 1:{}".format(self.total_roi1_passages), (box_x + text_x_offset, box_y + text_y_offset + int(box_height*0.6)), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0,0,0), 1)    
+        cv2.putText(img, "Passages in ROI 2:{}".format(self.total_roi2_passages), (box_x + text_x_offset, box_y + text_y_offset + int(box_height*0.8)), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0,0,0), 1)    
 
 
     def draw_person_info_rectangle(self, img, bbox):
