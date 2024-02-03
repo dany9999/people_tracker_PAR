@@ -54,7 +54,7 @@ while cap.isOpened():
     
     if not success:
         break    
-    if count % 1 == 0: 
+    if count % 2 == 0: 
         start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
         # Object Detection
         
@@ -64,7 +64,7 @@ while cap.isOpened():
             # Object Tracking
             tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)
 
-            if count % 30 == 0:   
+            if count % 15 == 0:   
                 #PAR detection
                 id_PAR_label = par_detector.par_detection(tracks_current, img)
                 #tracker.display_track(track_history , tracks_current , img)
@@ -98,9 +98,9 @@ while cap.isOpened():
         break
     count = count +1 
 
-tf = open("results/PAR_pred_duke.json", "w")
-json.dump(par_detector.id_PAR_label, tf, indent= 2)
-tf.close()    
+# tf = open("results/PAR_pred_duke.json", "w")
+# json.dump(par_detector.id_PAR_label, tf, indent= 2)
+# tf.close()    
 
 
 
@@ -110,7 +110,7 @@ cap.release()
 output_video.release()
 cv2.destroyAllWindows()
 
-#hf.set_person_attributes(people_dict, par_detector.PAR_common_solution())
+hf.set_person_attributes(people_dict, par_detector.PAR_common_solution())
 hf.create_the_output_file(people_dict, 'results/results.json')
 
 
