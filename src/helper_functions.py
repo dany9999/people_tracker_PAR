@@ -11,14 +11,14 @@ class TrackedPerson:
         self.lower_color = lower
         self.roi_passages = [0,0]
         self.roi_persistence_times = [0,0]
-        self.roi1passages = 0
+        self.roi1_passages = 0
         self.roi1_persistence_time = 0
-        self.roi2passages = 0
+        self.roi2_passages = 0
         self.roi2_persistence_time = 0       
     
     def to_dict(self):
-        self.roi1passages = self.roi_passages[0]
-        self.roi2passages = self.roi_passages[1]
+        self.roi1_passages = self.roi_passages[0]
+        self.roi2_passages = self.roi_passages[1]
         self.roi1_persistence_time = self.roi_persistence_times[0]        
         self.roi2_persistence_time = self.roi_persistence_times[1]
         custom_dict = {}
@@ -95,8 +95,8 @@ def create_the_output_file(people_dict, file_path):
 def set_person_attributes( people_dict, PAR_common_solutions):
     for id in people_dict.keys():
         people_dict[id].gender = PAR_common_solutions[id][0]
-        people_dict[id].upper_color = PAR_common_solutions[id][1]
-        people_dict[id].lower_color = PAR_common_solutions[id][2]
+        people_dict[id].upper_color = PAR_common_solutions[id][1].lower()
+        people_dict[id].lower_color = PAR_common_solutions[id][2].lower()
         people_dict[id].bag = PAR_common_solutions[id][3]
         people_dict[id].hat = PAR_common_solutions[id][4]
         

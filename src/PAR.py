@@ -109,9 +109,9 @@ class PAR():
             hat = False
         
         if male > female:                       # gestione gender
-            gender = "Male"
+            gender = "male"
         else:
-            gender = "Female"
+            gender = "female"
 
         
         lista = [gender,upper_color,lower_color,bag,hat]
