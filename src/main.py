@@ -36,7 +36,7 @@ track_history = {}    # Define a empty dictionary to store the previous center l
 
 
 fourcc = cv2.VideoWriter_fourcc(*'XVID')  # Puoi scegliere un altro codec se necessario
-output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 30.0, (1920, 1080))  # Imposta la risoluzione desiderata
+output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 15.0, (1920, 1080))  # Imposta la risoluzione desiderata
 
 
 previous_roi_status = [{}, {}]
@@ -93,7 +93,7 @@ while cap.isOpened():
         #hf.display_rois(img, rois)
         resized_img = cv2.resize(img, (1280, 720))
         cv2.imshow('video_show',resized_img)
-    output_video.write(img)
+        output_video.write(img)
 
    
     if cv2.waitKey(1) & 0xFF == 27:
