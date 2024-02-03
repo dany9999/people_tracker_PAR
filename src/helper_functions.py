@@ -72,7 +72,7 @@ def update_passages_persistence(rois, track, people_dict, previous_roi_status, f
     for i, roi in enumerate(rois):
         if roi[0][0] < center_x < roi[1][0] and roi[0][1] < center_y < roi[1][1]:
             # Update occurrences for ROI1 and object ID
-            curr_person.roi_persistence_times[i] += 1/fps
+            curr_person.roi_persistence_times[i] += (1/fps) * 2
             # Check if the object is already inside the ROI
             if not previous_roi_status[i].get(class_id, False):
                 curr_person.roi_passages[i] += 1
