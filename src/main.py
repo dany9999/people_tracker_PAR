@@ -53,8 +53,10 @@ while cap.isOpened():
     success, img = cap.read() # Read the image frame from data source
     
     if not success:
-        break    
-    if count % 2 == 0: 
+        break
+
+    fps_period = 2    
+    if count % fps_period == 0: 
         start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
         # Object Detection
         
@@ -72,7 +74,7 @@ while cap.isOpened():
             display.display_all(tracks_current, track_history,img, id_PAR_label, rois, previous_roi_status, count)
         
             #Count metrics for ROI
-            people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS))
+            people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS)/fps_period)
         
         # FPS Calculation
         end_time = time.perf_counter()
