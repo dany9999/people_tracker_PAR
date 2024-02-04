@@ -32,7 +32,7 @@ class YOLOv8Detector():
     def run_yolo(self , frame): 
         self.model.to(self.device) # Transfer a model and its associated tensors to CPU or GPU
         
-        yolo_result = self.model.predict(frame, conf=CONFIDENCE_THRESHOLD, classes = 0 , show_labels=False, show_conf= False, show_boxes= False)     # return a list of Results objects
+        yolo_result = self.model.predict(frame, verbose = False, conf=CONFIDENCE_THRESHOLD, classes = 0 , show_labels=False, show_conf= False, show_boxes= False)     # return a list of Results objects
 
         # Process results list
         for result in yolo_result:
