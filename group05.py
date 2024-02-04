@@ -72,7 +72,6 @@ fps_period = 2
 while cap.isOpened():
           
     success, img = cap.read() # Read the image frame from data source
-    print(img.shape)
     if not success:
         break
     current_image = img
