@@ -91,7 +91,7 @@ class Display():
     
     def draw_total_info_rectangle(self, img, previous_roi_status, cnt):      
         box_height = 200
-        box_width = 300
+        box_width = 330
         box_x = 0
         box_y = 0
         text_x_offset = 5
