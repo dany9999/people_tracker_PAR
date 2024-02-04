@@ -53,8 +53,8 @@ class Display():
                 else:
                     bbox_color = (0, 0, 255)
             self.display_track(img, prev_centers, bbox, track_id, bbox_color)
-            if count % 30:
-                self.display_PAR(img,id_PAR_label, track_id,bbox)
+            
+            self.display_PAR(img,id_PAR_label, track_id,bbox)
         self.draw_total_info_rectangle(img, previous_roi_status, cnt)
     
     def display_track(self , img, prev_centers, bbox, track_id, color):

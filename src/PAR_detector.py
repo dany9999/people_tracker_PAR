@@ -19,18 +19,11 @@ class PAR_detector:
             location = track.to_tlbr()
             bbox = location[:4].astype(int)
             bbox_center = ((bbox[0] + bbox[2]) // 2, (bbox[1] + bbox[3]) // 2)
-            # # Controllo dei limiti del bounding box
-            # ymin = max(0, bbox[1])
-            # xmin = max(0, bbox[0])
-            # ymax = min(img.shape[0], bbox[3])
-            # xmax = min(img.shape[1], bbox[2])
-
+            
             #Create list in dictonary
             if track_id not in self.id_PAR_label.keys(): 
                 self.id_PAR_label[track_id] = list()
 
-            # Riconoscimento degli attributi PAR sull'immagine ritagliata
-            #if len(self.id_PAR_label[track_id]) < 10:
             try:
                 cropped_image = img[bbox[1]:bbox[3], bbox[0]: bbox[2]]
                 bgr_image = cv2.cvtColor(cropped_image, cv2.COLOR_RGB2BGR)

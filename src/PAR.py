@@ -40,10 +40,6 @@ class PAR():
         self.model.eval()
         self.model.to(device)
         
-        #self.model = model
-        
-
-   
 
     def attribute_recognition(self,image):
         
@@ -63,10 +59,7 @@ class PAR():
             out = torch.sigmoid(out)
             
             out = out.cpu().detach().numpy()
-            
-            #out[out > 0.7] = 2
-            #out[out <= 0.3] = 0
-            #out[(out <= 0.7) & (out >= 0.3)] = 1
+    
             attribute = list(zip(self.attribute_name, out.tolist())) #Ritorna un dizionario coi valori float
             return attribute
 
@@ -124,8 +117,6 @@ class PAR():
         return tupla
          #ricorda di settare i colori in self.pred
 
-    # result = extractor(args.config, image, 2)
-    # result = extractor(path_config=args.config, path_attribute='peta_attribute.pkl', path_model="/content/drive/Shared drives/REID/HIEN/Models/OSNet_Person_Attribute_Refactor/checkpoints/0731_232453/model_best_accuracy.pth", image=image, return_type=0)
 
 
     
