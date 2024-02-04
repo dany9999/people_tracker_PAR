@@ -45,57 +45,53 @@ id_PAR_label = {}
 rois = hf.parse_config_file("data/config.txt", cap)
 tt_s = time.perf_counter()
 count = 0
-
+fps_period = 2
 
 
 while cap.isOpened():
           
     success, img = cap.read() # Read the image frame from data source
-    
     if not success:
         break
-
-    fps_period = 2    
+    current_image = img
+    
     if count % fps_period == 0: 
-        start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
-        # Object Detection
-        
-        results = object_detector.run_yolo(img)  # run the yolo v5 object detector 
-        if len(results) !=0:
-            detections , num_objects= object_detector.extract_detections(results, img, height=img.shape[0], width=img.shape[1]) # Plot the bounding boxes and extract detections (needed for DeepSORT) and number of relavent objects detected
-            # Object Tracking
-            tracks_current = tracker.object_tracker.update_tracks(detections, frame=img)
+            start_time = time.perf_counter()    #Start Timer - needed to calculate FPS        
+            # Object Detection
+            
+            results = object_detector.run_yolo(current_image)  # run the yolo v5 object detector 
+            if len(results) !=0:
+                detections , num_objects= object_detector.extract_detections(results, current_image, height=current_image.shape[0], width=current_image.shape[1]) # Plot the bounding boxes and extract detections (needed for DeepSORT) and number of relavent objects detected
+                # Object Tracking
+                tracks_current = tracker.object_tracker.update_tracks(detections, frame=current_image)
 
-            if count % 15 == 0:   
-                #PAR detection
-                id_PAR_label = par_detector.par_detection(tracks_current, img)
-                #tracker.display_track(track_history , tracks_current , img)
-            #Display GUI
-            display.display_all(tracks_current, track_history,img, id_PAR_label, rois, previous_roi_status, count)
-        
-            #Count metrics for ROI
-            people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS)/fps_period)
-        
-        # FPS Calculation
-        end_time = time.perf_counter()
-        total_time = end_time - start_time
-        fps = 1 / total_time
-        fps = cap.get(cv2.CAP_PROP_FPS)
-    # Descriptions on the output visualization
+                if count % 50 == 0:   
+                    #PAR detection
+                    id_PAR_label = par_detector.par_detection(tracks_current, current_image)
+                    #tracker.display_track(track_history , tracks_current , img)
+                #Display GUI
+                display.display_all(tracks_current, track_history,current_image, id_PAR_label, rois, previous_roi_status, count)
+            
+                #Count metrics for ROI
+                people_dict, previous_roi_status = hf.update_people_dict(people_dict, tracks_current, rois, previous_roi_status, cap.get(cv2.CAP_PROP_FPS)/fps_period)
+            
+            # FPS Calculation
+            end_time = time.perf_counter()
+            total_time = end_time - start_time
+            fps = 1 / total_time
+            fps = cap.get(cv2.CAP_PROP_FPS)
+        # Descriptions on the output visualization
+
+            cv2.putText(current_image, f'FPS: {int(fps)}', (20,40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
+            
+            resized_img = cv2.resize(current_image, (1280, 720))
+            cv2.imshow('video_show',resized_img)
+            output_video.write(current_image)
     
     
-    #if count % 3 == 0:
-        cv2.putText(img, f'FPS: {int(fps)}', (20,40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
-        # cv2.putText(img, f'MODEL: {MODEL_NAME}', (20,60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
-        # cv2.putText(img, f'TRACKED CLASS: {object_detector.tracked_class}', (20,80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
-        # cv2.putText(img, f'TRACKER: {tracker.algo_name}', (20,100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
-        # cv2.putText(img, f'DETECTED OBJECTS: {num_objects}', (20,120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
-        #hf.display_rois(img, rois)
-        resized_img = cv2.resize(img, (1280, 720))
-        cv2.imshow('video_show',resized_img)
-        output_video.write(img)
-
+       
    
+
     if cv2.waitKey(1) & 0xFF == 27:
         break
     count = count +1 
@@ -103,7 +99,7 @@ while cap.isOpened():
 # tf = open("results/PAR_pred_duke.json", "w")
 # json.dump(par_detector.id_PAR_label, tf, indent= 2)
 # tf.close()    
-
+id_PAR_label = par_detector.par_detection(tracks_current, current_image)
 
 
 
