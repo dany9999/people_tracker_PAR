@@ -1,4 +1,4 @@
-from PAR import PAR
+from src.PAR import PAR
 from PIL import Image
 import cv2
 from collections import Counter

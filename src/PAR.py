@@ -14,8 +14,8 @@ import numpy as np
 from PIL import Image
 from torchvision import transforms
 
-from Pedestrian_attribute_Rec.net import build_model
-from Pedestrian_attribute_Rec.utils2 import read_config
+from src.Pedestrian_attribute_Rec.net import build_model
+from src.Pedestrian_attribute_Rec.utils2 import read_config
 
 
 

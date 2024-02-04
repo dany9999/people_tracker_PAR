@@ -3,17 +3,31 @@ import time
 import os 
 import sys
 import yaml
-import helper_functions as hf
+import src.helper_functions as hf
 
-from PAR_detector import PAR_detector
-from Deepsort import DeepSortTracker
-from dataloader import cap
-from Detection.YoloV5 import YOLOv5Detector
-from Detection.YOLOv8 import YOLOv8Detector
+from src.PAR_detector import PAR_detector
+from src.Deepsort import DeepSortTracker
+#from dataloader import cap
+from src.Detection.YoloV5 import YOLOv5Detector
+from src.Detection.YOLOv8 import YOLOv8Detector
 import json
-from Dispaly import Display
+from src.Dispaly import Display
+import argparse
+
+parser = argparse.ArgumentParser(description="Run system")
+parser.add_argument("--video", help="video.mp4", required=True)
+parser.add_argument("--configuration", help="config", required=True)
+parser.add_argument("--results", help="results", required=True)
+args = parser.parse_args()
+
+# Logica principale del tuo script
+
+video_filename = args.video
+config_filename = args.configuration
+results_filename = args.results
+
 # Parameters from config.yml file
-with open('config.yml' , 'r') as f:
+with open('./config.yml' , 'r') as f:
     config =yaml.safe_load(f)['people_track']['main']
 
 # Add the src directory to the module search path
@@ -30,7 +44,7 @@ object_detector = YOLOv8Detector(model_name=MODEL_NAME)
 tracker = DeepSortTracker()
 par_detector = PAR_detector()
 display = Display()
-
+cap = cv2.VideoCapture(video_filename)
 
 track_history = {}    # Define a empty dictionary to store the previous center locations for each track ID
 
@@ -42,10 +56,12 @@ output_video = cv2.VideoWriter('results/output_video.avi', fourcc, 15.0, (1920, 
 previous_roi_status = [{}, {}]
 people_dict = {}
 id_PAR_label = {}
-rois = hf.parse_config_file("data/config.txt", cap)
+rois = hf.parse_config_file(config_filename, cap)
 tt_s = time.perf_counter()
 count = 0
 fps_period = 2
+
+
 
 
 while cap.isOpened():
@@ -109,7 +125,7 @@ output_video.release()
 cv2.destroyAllWindows()
 
 hf.set_person_attributes(people_dict, par_detector.PAR_common_solution())
-hf.create_the_output_file(people_dict, 'results/results.json')
+hf.create_the_output_file(people_dict, results_filename)
 
 
 
