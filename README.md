@@ -1,12 +1,14 @@
 # people_tracker_PAR
 
 
-# Bugs 
+## Insert in config.yml in model_name other model
+ main:
+  model_name: 'yolov8x' 
 
-- write a control on img(succes) in while cap.isOpened(): 
-'
-results = object_detector.run_yolo(img)  # run the yolo v5 object detector 
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/danieleabbagnale/Desktop/people_tracker_PAR/src/YoloV5.py", line 37, in run_yolo
-    frame_width = int(frame.shape[1]/self.downscale_factor)
-'
+  - yolov8x
+  - yolov5x6
+  - yolo5x6u
+  
+  ## PAR model 
+  In people_tracker_PAR/src/Pedestrian_attribute_Rec there is the preitreined PAR model
+
