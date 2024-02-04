@@ -18,7 +18,11 @@ class Display():
     def __init__(self) :
         self.total_roi1_passages = 0
         self.total_roi2_passages = 0
+        self.roi1_people_ids = set()
+        self.roi2_people_ids = set()
         pass
+
+    
     
     def display_all(self, tracks_current, track_history,img, id_PAR_label, rois, previous_roi_status, count):        
         self.display_rois(img, rois)
@@ -32,7 +36,6 @@ class Display():
             location = track.to_tlbr()
             bbox = location[:4].astype(int)
             bbox_center = ((bbox[0] + bbox[2]) // 2, (bbox[1] + bbox[3]) // 2)
-
             # Retrieve the previous center location, if available
             prev_centers = track_history.get(track_id ,[])
             prev_centers.append(bbox_center)
@@ -41,9 +44,11 @@ class Display():
                 if status.get(track_id, False):
                     if i == 0:
                         bbox_color = (255, 0, 0)
+                        self.roi1_people_ids.add(track_id)
                         break
                     else:
                         bbox_color = (0, 255, 0)
+                        self.roi2_people_ids.add(track_id)
                         break
                 else:
                     bbox_color = (0, 0, 255)
@@ -93,16 +98,21 @@ class Display():
         text_y_offset = 5
         color = (255, 255, 255)
         font_scale = 1
-        people_in_roi1 = sum([value for value in previous_roi_status[0].values() if value])
-        people_in_roi2 = sum([value for value in previous_roi_status[1].values() if value])
+        # people_in_roi1 = sum([value for value in previous_roi_status[0].values() if value])
+        # people_in_roi2 = sum([value for value in previous_roi_status[1].values() if value])
+        people_in_roi1 = len([value for value in previous_roi_status[0].values() if value])
+        people_in_roi2 = len([value for value in previous_roi_status[1].values() if value])
+
         people_in_roi = people_in_roi1 + people_in_roi2
-        self.total_roi1_passages += people_in_roi1
-        self.total_roi2_passages += people_in_roi2
+        self.total_roi1_passages = len(self.roi1_people_ids)
+        self.total_roi2_passages = len(self.roi2_people_ids)
         cv2.rectangle(img, (0, 0),  (box_width, box_height), color, thickness=cv2.FILLED)
         cv2.putText(img, "People in ROI:{}".format(people_in_roi), (box_x + text_x_offset, box_y + text_y_offset + int(box_height*0.2)), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0,0,0), 1)    
         cv2.putText(img, "Total people:{}".format(cnt), (box_x + text_x_offset, box_y + text_y_offset + int(box_height*0.4)), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0,0,0), 1)    
         cv2.putText(img, "Passages in ROI 1:{}".format(self.total_roi1_passages), (box_x + text_x_offset, box_y + text_y_offset + int(box_height*0.6)), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0,0,0), 1)    
         cv2.putText(img, "Passages in ROI 2:{}".format(self.total_roi2_passages), (box_x + text_x_offset, box_y + text_y_offset + int(box_height*0.8)), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0,0,0), 1)    
+
+
 
 
     def draw_person_info_rectangle(self, img, bbox):
