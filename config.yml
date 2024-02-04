@@ -32,13 +32,6 @@ people_track:
   obj_tack_color: (51,255,255) # Track color in BGR format 
   obj_track_box_color: (0,0,255)  # Track box color in BGR Format 
 
- dataloader:
-
-  data_source : "video file"   # source can be set to either "video file" or "webcam"
-  webcam_id : 2                # if using external webcam. Please modify based on your system
-  data_path: "./data/Example.mp4" # path to the video file if you are using a video as input
-  frame_width:  640
-  frame_height:  640
  
  main:
   model_name: 'yolov8x' 

@@ -46,6 +46,11 @@ par_detector = PAR_detector()
 display = Display()
 cap = cv2.VideoCapture(video_filename)
 
+#FRAME_WIDTH
+#FRAME_HEIGHT
+#cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
+#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
+
 track_history = {}    # Define a empty dictionary to store the previous center locations for each track ID
 
 
@@ -67,6 +72,7 @@ fps_period = 2
 while cap.isOpened():
           
     success, img = cap.read() # Read the image frame from data source
+    print(img.shape)
     if not success:
         break
     current_image = img
@@ -96,10 +102,10 @@ while cap.isOpened():
             total_time = end_time - start_time
             fps = 1 / total_time
             fps = cap.get(cv2.CAP_PROP_FPS)
-        # Descriptions on the output visualization
-
-            cv2.putText(current_image, f'FPS: {int(fps)}', (20,40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
-            
+        
+        
+        
+            #output visualization            
             resized_img = cv2.resize(current_image, (1280, 720))
             cv2.imshow('video_show',resized_img)
             output_video.write(current_image)
@@ -126,8 +132,6 @@ cv2.destroyAllWindows()
 
 hf.set_person_attributes(people_dict, par_detector.PAR_common_solution())
 hf.create_the_output_file(people_dict, results_filename)
-
-
 
 
 tt_end = time.perf_counter()
