@@ -46,10 +46,10 @@ par_detector = PAR_detector()
 display = Display()
 cap = cv2.VideoCapture(video_filename)
 
-#FRAME_WIDTH
-#FRAME_HEIGHT
-#cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
-#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
+FRAME_WIDTH = 640
+FRAME_HEIGHT = 640
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
 
 track_history = {}    # Define a empty dictionary to store the previous center locations for each track ID
 
@@ -117,10 +117,7 @@ while cap.isOpened():
     if cv2.waitKey(1) & 0xFF == 27:
         break
     count = count +1 
-
-# tf = open("results/PAR_pred_duke.json", "w")
-# json.dump(par_detector.id_PAR_label, tf, indent= 2)
-# tf.close()    
+  
 id_PAR_label = par_detector.par_detection(tracks_current, current_image)
 
 
