@@ -3,6 +3,13 @@ from PIL import Image
 import cv2
 from collections import Counter
 
+def check_list(lol, deflt):
+        if len(lol)>0:
+            if len(lol[0])>0:
+                return lol[0][0]
+        return deflt
+
+
 class PAR_detector:
 
     def __init__(self) :
@@ -59,12 +66,19 @@ class PAR_detector:
             frequency['color_low'][pred[4]] += 1
 
         # Inizializza una tupla con i valori più frequenti
+
+        
+
         best_freq_pred = (
-            frequency['gender'].most_common(1)[0][0],
-            frequency['hat'].most_common(1)[0][0],
-            frequency['bag'].most_common(1)[0][0],
-            frequency['color_up'].most_common(1)[0][0],
-            frequency['color_low'].most_common(1)[0][0]
+        
+            check_list(frequency['gender'].most_common(1), 'male'),
+            check_list(frequency['hat'].most_common(1),'False'),
+            check_list(frequency['bag'].most_common(1),'False'),
+            check_list(frequency['color_up'].most_common(1), 'black'),
+            check_list(frequency['color_low'].most_common(1), 'black')
         )
 
         return best_freq_pred 
+
+
+  
