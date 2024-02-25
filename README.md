@@ -21,6 +21,13 @@ First, clone the repository:
 git clone https://github.com/dany9999/people_tracker_PAR
 ```
 
+### Install requirements
+```
+pip3 install requirements.txt
+
+```
+
+
 ### PAR model 
 Then, download pre-trained PAR detector file from here: 
 
