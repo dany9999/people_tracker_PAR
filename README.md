@@ -29,9 +29,7 @@ pip3 install requirements.txt
 
 
 ### PAR model 
-Then, download pre-trained PAR detector file from [here](https://drive.google.com/drive/folders/1Ya4gTu5hHhgN2-PptSpWzFleJB8oAJpt?usp=share_link).
-
-NOTE: Insert it in people_tracker_PAR/src/Pedestrian_attribute_Rec 
+Then, download pre-trained PAR detector file from [here](https://drive.google.com/drive/folders/1Ya4gTu5hHhgN2-PptSpWzFleJB8oAJpt?usp=share_link) and insert it in people_tracker_PAR/src/Pedestrian_attribute_Rec 
 
 
 ## choice model detector
