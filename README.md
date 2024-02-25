@@ -29,12 +29,12 @@ pip3 install requirements.txt
 
 
 ### PAR model 
-Then, download pre-trained PAR detector file from [here](https://drive.google.com/drive/folders/1Ya4gTu5hHhgN2-PptSpWzFleJB8oAJpt?usp=share_link) and insert it in people_tracker_PAR/src/Pedestrian_attribute_Rec 
+Then, download pre-trained PAR detector file from [here](https://drive.google.com/drive/folders/1Ya4gTu5hHhgN2-PptSpWzFleJB8oAJpt?usp=share_link) and insert it in **people_tracker_PAR/src/Pedestrian_attribute_Rec** 
 
 
 ## choice model detector
 
-Insert in config.yml file the desired model:
+Insert in **config.yml** file the desired model:
 ```
  main:
   model_name: 'yolov8x'  <----
@@ -43,12 +43,12 @@ Insert in config.yml file the desired model:
 
 ## Running the system
 
-this example runs the system on a video and generates an output video and a file results.txt with the pedestrian attributes and people's interaction with the regions of interest:
+this example runs the system on a video and generates an output video and a file **results.txt** with the pedestrian attributes and people's interaction with the regions of interest:
 
 ```
 python3 main.py --video video.mp4 --configuration config.txt --results results.txt
 ```
 
-NOTE: In the config.txt file there are the coordinates of the ROIs
+NOTE: In the **config.txt** file there are the coordinates of the ROIs
 
 
