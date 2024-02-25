@@ -17,8 +17,9 @@ NOTE: This project was based on the following repositories:
 
 First, clone the repository:
 
+```
 git clone https://github.com/dany9999/people_tracker_PAR
-
+```
 
 ### PAR model 
 Then, download pre-trained PAR detector file from here: 
